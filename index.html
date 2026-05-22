@@ -72,6 +72,10 @@ body.monolith-zooming .webgl-monolith-canvas{opacity:0;filter:blur(12px);transfo
 .monolith-face.left,.monolith-face.right{filter:brightness(.72) contrast(1.12)}.monolith-face.top{filter:brightness(1.07)}.monolith-face.bottom{filter:brightness(.62)}
 .monolith-stage .monolith-shell::after{content:'';position:absolute;left:50%;bottom:-7vh;width:34vw;height:9vh;transform:translateX(-50%) rotateX(72deg);background:radial-gradient(ellipse at center,rgba(42,40,35,.22),rgba(72,68,60,.1) 34%,transparent 72%);filter:blur(14px);pointer-events:none;}
 .monolith-face.back .monolith-text,.monolith-face.right .monolith-text{opacity:.68}.monolith-face.left .monolith-text{opacity:.82}.monolith-face.top .monolith-text,.monolith-face.bottom .monolith-text{opacity:.56}
+.monolith-stage.mobile-image-ready .monolith-face{background-image:linear-gradient(90deg,rgba(0,0,0,.42),rgba(255,255,255,.10) 34%,rgba(0,0,0,.36) 100%),var(--mobile-face-image),linear-gradient(180deg,#101014,#2e3238);background-size:100% 100%,cover,100% 100%;background-position:center;border-color:rgba(255,255,255,.18);box-shadow:inset 11px 0 24px rgba(255,255,255,.28),inset -16px 0 30px rgba(0,0,0,.52),0 26px 84px rgba(0,0,0,.2),0 0 0 1px rgba(255,255,255,.28)}
+.monolith-stage.mobile-image-ready .monolith-text{mix-blend-mode:screen;opacity:.55;color:rgba(255,255,255,.18);text-shadow:0 1px 4px rgba(0,0,0,.7)}
+.monolith-stage.mobile-image-ready .monolith-letter{color:rgba(255,255,255,.14);text-shadow:0 1px 4px rgba(0,0,0,.72)}
+.monolith-stage.mobile-image-ready .monolith-letter.lit{color:rgba(var(--pulse-color),var(--i));}
 .monolith-hint{position:absolute;right:16px;bottom:13px;color:rgba(0,0,0,.34);font-size:13px;line-height:.92;text-transform:uppercase;letter-spacing:.055em;text-align:right;}
 @keyframes monolithSpin{0%{transform:rotateX(-5deg) rotateY(-32deg) rotateZ(-.3deg)}100%{transform:rotateX(-5deg) rotateY(328deg) rotateZ(-.3deg)}}
 body.monolith-ready:not(.monolith-entered):not(.in-project){background:#fff;color:#050505;overflow:hidden;}
@@ -145,6 +149,7 @@ const mediaCount = (p) => (p.images || []).length;
 const monolithStage = $('#monolithStage');
 const monolithCore = $('#monolithCore');
 let monolithEntered = false;
+const MOBILE_MONOLITH_IMAGES = Array.from({length:5},(_,i)=>`assets/monolith-loop/set-3/${String(i).padStart(2,'0')}.jpg`);
 const MONOLITH_PROJECTS = [...PROJECTS].sort((a,b)=>a.title.localeCompare(b.title));
 const MONOLITH_LETTERS = MONOLITH_PROJECTS.flatMap((p)=>p.title.replace(/\s+/g,'').split('').map((char)=>({char, category:p.category || 'fashion'})));
 function monolithLetterStream(offset=0, line=0, lines=92, letters=78){
@@ -162,10 +167,17 @@ function monolithTextField(faceOffset=0, lines=92, letters=78){
   const charOffset = (faceOffset * 37) % MONOLITH_LETTERS.length;
   return Array.from({length:lines},(_,line)=>`<span class="monolith-line">${monolithLetterStream((charOffset + line * 23) % MONOLITH_LETTERS.length, line, lines, letters)}</span>`).join('');
 }
-function buildCssMonolith(){
+function buildCssMonolith(options={}){
   if(!monolithCore) return;
   const faces=['front','right','back','left','top','bottom'];
-  monolithCore.innerHTML = faces.map((face,i)=>`<div class="monolith-face ${face}"><div class="monolith-text">${monolithTextField(i*13, (face === 'top' || face === 'bottom') ? 12 : 42, (face === 'top' || face === 'bottom') ? 28 : 36)}</div></div>`).join('');
+  const images = options.images || [];
+  if(images.length) monolithStage.classList.add('mobile-image-ready');
+  else monolithStage.classList.remove('mobile-image-ready');
+  monolithCore.innerHTML = faces.map((face,i)=>{
+    const img = images.length ? images[i % images.length] : '';
+    const style = img ? ` style="--mobile-face-image:url('${img}')"` : '';
+    return `<div class="monolith-face ${face}"${style}><div class="monolith-text">${monolithTextField(i*13, (face === 'top' || face === 'bottom') ? 12 : 42, (face === 'top' || face === 'bottom') ? 28 : 36)}</div></div>`;
+  }).join('');
   cacheRippleData();
   document.body.classList.add('monolith-ready');
   startLetterRipple();
@@ -311,9 +323,9 @@ function shouldUseCssMonolith(){
 function buildMonolith(){
   document.body.classList.add('monolith-ready');
   // Mobile Safari can show a blank WebGL canvas while the heavy texture loop loads/loses context.
-  // Use the lighter CSS prism on phones so the entrance is always visible.
+  // Use a lighter CSS image prism on phones so the entrance is visible without the heavy WebGL loop.
   if(shouldUseCssMonolith()){
-    buildCssMonolith();
+    buildCssMonolith({images:MOBILE_MONOLITH_IMAGES});
     return;
   }
   initWebGLMonolith().catch((error)=>{
