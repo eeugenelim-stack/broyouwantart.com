@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About — Bro You Want Art?</title>
+  <meta name="description" content="About Eugene Lim — creative director, stylist, writer, and image-maker.">
+  <meta name="theme-color" content="#ffffff">
+  <style>
+:root {
+  --paper:#fff;
+  --ink:#050505;
+  --red:#f00;
+  --grey:#b7b7b7;
+  --sans:Arial, Helvetica, sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:700;text-rendering:geometricPrecision;letter-spacing:-.055em;}
+a{color:inherit;text-decoration:none}
+.site-head{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:flex-start;gap:18px;padding:14px 16px 10px;background:linear-gradient(#fff 0%, rgba(255,255,255,.94) 72%, rgba(255,255,255,0));font-size:18px;line-height:.9;text-transform:uppercase;}
+.brand{letter-spacing:-.07em;color:var(--ink);min-width:max-content}.brand:hover{color:var(--red)}
+.modes{display:flex;gap:10px;color:var(--red);font-size:13px;line-height:.9;margin-top:1px}.modes a{opacity:.42}.modes a.active,.modes a:hover{opacity:1}
+main{min-height:100vh;padding:120px 16px 18vh}
+.about-wrap{display:grid;grid-template-columns:minmax(220px,32vw) minmax(420px,860px);gap:38px;align-items:start;max-width:1380px}
+.profile img{display:block;width:100%;height:auto;max-height:78vh;object-fit:contain;object-position:top left}
+.about-copy{color:var(--red);font-size:clamp(20px,2vw,32px);line-height:1.02;letter-spacing:-.055em;max-width:34ch}
+.about-copy p{margin:0 0 .9em}
+.about-meta{position:fixed;left:16px;bottom:12px;z-index:21;color:var(--red);font-size:13px;line-height:.92;text-transform:uppercase;letter-spacing:-.045em;max-width:42ch}
+@media(max-width:760px){.site-head{padding:10px;gap:10px;font-size:15px}.modes{font-size:11px;gap:7px}main{padding:94px 10px 18vh}.about-wrap{display:block}.profile{margin-bottom:24px}.about-copy{font-size:clamp(19px,5.8vw,28px);max-width:none}.about-meta{left:10px;right:10px;font-size:11px;max-width:none}}
+  </style>
+</head>
+<body>
+  <header class="site-head" aria-label="Site navigation">
+    <a class="brand" href="index.html">BRO YOU WANT ART?<br>EUGENE LIM</a>
+    <nav class="modes" aria-label="View controls">
+      <a href="index.html">Text</a>
+      <a href="index.html#images">Images</a>
+      <a class="active" href="about.html">About</a>
+    </nav>
+  </header>
+  <main>
+    <section class="about-wrap" aria-label="About Eugene Lim">
+      <figure class="profile">
+        <img src="assets/eugenelightning/contact/020-26866077_1604907472958584_4415306734831140864_n.jpg" alt="Eugene Lim in a red hoodie and black outerwear">
+      </figure>
+      <article class="about-copy">
+        <p>Eugene Lim is a Singapore-based creative director, stylist, writer, and image-maker.</p>
+        <p>He started in editorial in 2012 and spent nearly a decade making fashion stories across magazines — styling shoots, writing features, interviewing designers, building visual concepts, and shaping images for the page.</p>
+        <p>His work often begins with a simple visual device: a prop, a place, a silhouette, a joke, a rule. Clothes are treated as objects with shape and behaviour, not just outfits. A dry cleaner becomes a set. A plant shop becomes a world. A body becomes a diagram, a character, or a sculpture for the page.</p>
+        <p>His editorial work includes covers and stories with Chris Hemsworth, Vava, and other cultural figures, but his favourite subjects are still the everyday people of Singapore. The familiar ones. The slightly strange ones. The ones who make the image feel close to home.</p>
+        <p>Eugene left full-time editorial in 2021, but continues to take on selected freelance projects in creative direction, styling, writing, and image-making.</p>
+      </article>
+    </section>
+  </main>
+  <div class="about-meta">About Eugene Lim / Creative direction, styling, writing, image-making.</div>
+</body>
+</html>
