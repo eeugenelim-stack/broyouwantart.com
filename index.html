@@ -104,9 +104,9 @@ body.monolith-zooming .monolith-v2-field{opacity:0;filter:blur(10px);transform:s
 .monolith-v2-ui{position:absolute;z-index:7;left:16px;right:16px;bottom:18px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;pointer-events:none;text-transform:uppercase;letter-spacing:.055em;font-size:13px;line-height:.92;color:rgba(0,0,0,.46)}
 .monolith-v2-copy{max-width:48ch}.monolith-v2-actions{display:flex;gap:14px;pointer-events:auto}.monolith-v2-actions button{font-size:13px;line-height:.92;color:rgba(0,0,0,.48);text-transform:uppercase}.monolith-v2-actions button:hover,.monolith-v2-actions button:focus-visible{color:#050505}.monolith-v2-actions button:focus-visible{outline:1px solid currentColor;outline-offset:3px}.monolith-v2-actions button:first-child{color:#050505}
 .monolith-v2-fallback{position:absolute;inset:0;z-index:1;transform-style:preserve-3d;perspective:900px;overflow:hidden;}
-.monolith-v2-slab{position:absolute;top:46%;left:50%;width:clamp(58px,12vw,138px);height:clamp(360px,76vh,760px);background:linear-gradient(100deg,#17130f 0%,#33271d 18%,#0c0b0a 42%,#4a3828 56%,#181512 79%,#070707 100%);box-shadow:inset 10px 0 26px rgba(255,238,204,.12),inset -14px 0 34px rgba(0,0,0,.64),0 26px 74px rgba(30,25,20,.22);border:1px solid rgba(0,0,0,.34);transform:translate(-50%,-50%) translateX(var(--x)) translateY(var(--y)) rotateY(var(--ry)) rotateZ(var(--rz));opacity:.96;}
+.monolith-v2-slab{position:absolute;top:46%;left:50%;width:var(--w,clamp(58px,12vw,138px));height:var(--h,clamp(360px,76vh,760px));background:linear-gradient(100deg,#17130f 0%,#33271d 18%,#0c0b0a 42%,#4a3828 56%,#181512 79%,#070707 100%);box-shadow:inset 10px 0 26px rgba(255,238,204,.12),inset -14px 0 34px rgba(0,0,0,.64),0 26px 74px rgba(30,25,20,.22);border:1px solid rgba(0,0,0,.34);clip-path:polygon(var(--tl,0%) 0%,var(--tr,100%) var(--top,0%),var(--br,100%) 100%,var(--bl,0%) var(--bottom,100%));transform:translate(-50%,-50%) translateX(var(--x)) translateY(var(--y)) rotateY(var(--ry)) rotateZ(var(--rz));opacity:.96;}
 .monolith-v2-slab::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.15),transparent 22%,rgba(0,0,0,.2) 61%,rgba(255,255,255,.08));mix-blend-mode:screen;opacity:.68;}
-@media(max-width:760px){.monolith-v2-ui{left:10px;right:10px;bottom:14px;font-size:11px}.monolith-v2-actions{gap:10px}.monolith-v2-actions button{font-size:11px}.monolith-v2-copy{max-width:31ch}.monolith-v2-slab{top:47%;width:clamp(48px,17vw,92px);height:clamp(360px,78vh,640px)}}
+@media(max-width:760px){.monolith-v2-ui{left:10px;right:10px;bottom:14px;font-size:11px}.monolith-v2-actions{gap:10px}.monolith-v2-actions button{font-size:11px}.monolith-v2-copy{max-width:31ch}.monolith-v2-slab{top:47%;--w:var(--mw,clamp(48px,17vw,92px));--h:var(--mh,clamp(360px,78vh,640px))}}
 @media(prefers-reduced-motion:reduce){.monolith-v2-field{transition:none}}
 
 </style>
@@ -410,10 +410,15 @@ function buildMonolithV2(){
   const buildFallback = ()=>{
     field.classList.add('monolith-v2-fallback');
     const slabs = [
-      ['-42vw','2vh','-64deg','-.8deg'],['-28vw','6vh','-16deg','.4deg'],['-13vw','-3vh','18deg','-.2deg'],
-      ['2vw','7vh','-5deg','.6deg'],['17vw','0vh','58deg','-.7deg'],['31vw','8vh','10deg','.2deg'],['44vw','2vh','-48deg','.5deg']
+      {x:'-44vw',y:'8vh',ry:'-68deg',rz:'-1.1deg',w:'clamp(36px,7vw,86px)',h:'clamp(280px,55vh,560px)',mw:'clamp(32px,10vw,58px)',mh:'clamp(250px,52vh,480px)',tl:'5%',tr:'100%',br:'92%',bl:'0%'},
+      {x:'-30vw',y:'-1vh',ry:'-18deg',rz:'.5deg',w:'clamp(72px,13vw,148px)',h:'clamp(470px,88vh,840px)',mw:'clamp(58px,18vw,98px)',mh:'clamp(390px,78vh,680px)',tl:'0%',tr:'96%',br:'100%',bl:'8%'},
+      {x:'-15vw',y:'10vh',ry:'23deg',rz:'-.25deg',w:'clamp(48px,9vw,104px)',h:'clamp(330px,63vh,630px)',mw:'clamp(42px,13vw,76px)',mh:'clamp(310px,61vh,560px)',tl:'7%',tr:'100%',br:'100%',bl:'2%'},
+      {x:'1vw',y:'-3vh',ry:'-4deg',rz:'.65deg',w:'clamp(94px,16vw,178px)',h:'clamp(560px,99vh,920px)',mw:'clamp(70px,21vw,116px)',mh:'clamp(440px,86vh,760px)',tl:'0%',tr:'91%',br:'98%',bl:'0%'},
+      {x:'18vw',y:'8vh',ry:'61deg',rz:'-.9deg',w:'clamp(42px,8vw,94px)',h:'clamp(390px,70vh,690px)',mw:'clamp(38px,12vw,70px)',mh:'clamp(340px,68vh,610px)',tl:'4%',tr:'100%',br:'94%',bl:'0%'},
+      {x:'32vw',y:'-4vh',ry:'8deg',rz:'.25deg',w:'clamp(82px,14vw,158px)',h:'clamp(500px,92vh,860px)',mw:'clamp(62px,18vw,104px)',mh:'clamp(410px,82vh,720px)',tl:'0%',tr:'98%',br:'100%',bl:'6%'},
+      {x:'45vw',y:'12vh',ry:'-52deg',rz:'.7deg',w:'clamp(34px,6vw,78px)',h:'clamp(260px,50vh,520px)',mw:'clamp(30px,9vw,54px)',mh:'clamp(240px,50vh,460px)',tl:'10%',tr:'100%',br:'88%',bl:'0%'}
     ];
-    field.innerHTML = slabs.map((v,i)=>`<i class="monolith-v2-slab" style="--x:${v[0]};--y:${v[1]};--ry:${v[2]};--rz:${v[3]};height:calc(clamp(360px,76vh,760px) * ${[.9,1.08,.98,1.16,.94,1.06,.88][i]});"></i>`).join('');
+    field.innerHTML = slabs.map((v)=>`<i class="monolith-v2-slab" style="--x:${v.x};--y:${v.y};--ry:${v.ry};--rz:${v.rz};--w:${v.w};--h:${v.h};--mw:${v.mw};--mh:${v.mh};--tl:${v.tl};--tr:${v.tr};--br:${v.br};--bl:${v.bl};"></i>`).join('');
   };
   if(cssOnly){
     buildFallback();
@@ -442,12 +447,21 @@ function buildMonolithV2(){
     const side = new THREE.DirectionalLight(0xffffff,.72); side.position.set(5,3,-2); scene.add(side);
     const baseMat = new THREE.MeshStandardMaterial({color:0x201812,roughness:.88,metalness:.34});
     const configs = [
-      [-5.2,1.0,-2.2,1.32,7.2,.30,-.58],[-3.35,1.08,1.0,1.04,8.2,.28,-.15],[-1.65,.82,-4.4,1.2,6.8,.30,.4],
-      [.05,1.1,-.8,1.42,8.8,.30,-.03],[1.86,.88,2.2,1.08,7.4,.28,.56],[3.55,1.0,-3.0,1.24,8.0,.30,.16],[5.15,.78,.1,.95,6.6,.26,-.74],[-.55,.65,4.0,.82,6.0,.24,-.42]
+      [-5.55,.25,-2.4,.72,5.4,.32,-.66],[-3.62,.98,1.0,1.44,8.9,.27,-.18],[-1.86,.32,-4.6,.88,6.2,.34,.43],
+      [-.08,1.18,-.9,1.74,9.7,.29,-.035],[1.98,.42,2.35,.76,7.0,.26,.62],[3.82,1.02,-3.1,1.36,8.6,.33,.12],[5.32,.1,.0,.62,5.0,.25,-.80],[-.72,-.15,4.15,1.05,5.8,.22,-.39]
     ];
     const slabs = configs.map((c,i)=>{
       const [x,y,z,w,h,d,ry]=c;
       const geo = new THREE.BoxGeometry(w,h,d,1,20,1);
+      const topShear = (i % 3 - 1) * .035;
+      const pos = geo.attributes.position;
+      for(let j=0; j<pos.count; j++){
+        const yv = pos.getY(j);
+        if(yv > h * .45) pos.setX(j, pos.getX(j) + topShear);
+        if(yv < -h * .45) pos.setX(j, pos.getX(j) - topShear * .55);
+      }
+      pos.needsUpdate = true;
+      geo.computeVertexNormals();
       const mat = baseMat.clone();
       const tint = [0x1a120e,0x34251a,0x0f0f0e,0x3a2b1f,0x18120f,0x4b3827,0x0b0a09,0x2a2018][i%8];
       mat.color.setHex(tint);
