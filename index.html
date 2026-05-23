@@ -70,8 +70,9 @@ body.monolith-zooming .webgl-monolith-canvas{opacity:0;filter:blur(12px);transfo
 .monolith-face.left,.monolith-face.right{filter:brightness(.72) contrast(1.12)}.monolith-face.top{filter:brightness(1.07)}.monolith-face.bottom{filter:brightness(.62)}
 .monolith-stage .monolith-shell::after{content:'';position:absolute;left:50%;bottom:-7vh;width:34vw;height:9vh;transform:translateX(-50%) rotateX(72deg);background:radial-gradient(ellipse at center,rgba(42,40,35,.22),rgba(72,68,60,.1) 34%,transparent 72%);filter:blur(14px);pointer-events:none;}
 .monolith-face.back .monolith-text,.monolith-face.right .monolith-text{opacity:.68}.monolith-face.left .monolith-text{opacity:.82}.monolith-face.top .monolith-text,.monolith-face.bottom .monolith-text{opacity:.56}
-.monolith-stage.mobile-image-ready .monolith-face{background-image:linear-gradient(90deg,rgba(0,0,0,.42),rgba(255,255,255,.10) 34%,rgba(0,0,0,.36) 100%),var(--mobile-face-image),linear-gradient(180deg,#101014,#2e3238);background-size:100% 100%,400% 100%,100% 100%;background-position:0 0,var(--mobile-face-position,0% 50%),0 0;border-color:rgba(255,255,255,.18);box-shadow:inset 11px 0 24px rgba(255,255,255,.28),inset -16px 0 30px rgba(0,0,0,.52),0 26px 84px rgba(0,0,0,.2),0 0 0 1px rgba(255,255,255,.28);transition:filter .85s ease,opacity .85s ease}
-.monolith-stage.mobile-image-ready.mobile-blackout .monolith-face{filter:brightness(0) contrast(1.08)}
+.monolith-stage.mobile-image-ready .monolith-face{background-image:linear-gradient(90deg,rgba(0,0,0,.42),rgba(255,255,255,.10) 34%,rgba(0,0,0,.36) 100%),var(--mobile-face-image),linear-gradient(180deg,#101014,#2e3238);background-size:100% 100%,400% 100%,100% 100%;background-position:0 0,var(--mobile-face-position,0% 50%),0 0;border-color:rgba(255,255,255,.18);box-shadow:inset 11px 0 24px rgba(255,255,255,.28),inset -16px 0 30px rgba(0,0,0,.52),0 26px 84px rgba(0,0,0,.2),0 0 0 1px rgba(255,255,255,.28)}
+.monolith-stage.mobile-image-ready .monolith-face::after{background:linear-gradient(90deg,rgba(0,0,0,.78),rgba(7,7,8,.98) 45%,rgba(0,0,0,.86) 100%);mix-blend-mode:normal;opacity:0;transition:opacity .85s ease}
+.monolith-stage.mobile-image-ready.mobile-blackout .monolith-face::after{opacity:1}
 .monolith-stage.mobile-image-ready .monolith-text{mix-blend-mode:screen;opacity:.55;color:rgba(255,255,255,.18);text-shadow:0 1px 4px rgba(0,0,0,.7)}
 .monolith-stage.mobile-image-ready .monolith-letter{color:rgba(255,255,255,.14);text-shadow:0 1px 4px rgba(0,0,0,.72)}
 .monolith-stage.mobile-image-ready .monolith-letter.lit{color:rgba(255,255,255,var(--i));text-shadow:0 0 calc(var(--i)*4px) rgba(255,255,255,calc(var(--i)*.65)),0 0 calc(var(--i)*14px) rgba(255,255,255,calc(var(--i)*.55));}
@@ -148,7 +149,8 @@ const mediaCount = (p) => (p.images || []).length;
 const monolithStage = $('#monolithStage');
 const monolithCore = $('#monolithCore');
 let monolithEntered = false;
-const MOBILE_MONOLITH_IMAGES = Array.from({length:5},(_,i)=>`assets/monolith-loop/set-3/${String(i).padStart(2,'0')}.jpg`);
+const MONOLITH_LOOP_IMAGES = Array.from({length:5},(_,i)=>`assets/monolith-loop/set-3/${String(i).padStart(2,'0')}.jpg`);
+const MOBILE_MONOLITH_IMAGES = MONOLITH_LOOP_IMAGES;
 let mobileMonolithTimer = null;
 const MONOLITH_PROJECTS = [...PROJECTS].sort((a,b)=>a.title.localeCompare(b.title));
 const MONOLITH_LETTERS = MONOLITH_PROJECTS.flatMap((p)=>p.title.replace(/\s+/g,'').split('').map((char)=>({char, category:p.category || 'fashion'})));
@@ -400,9 +402,9 @@ async function initWebGLMonolith(){
   const keyLight = new THREE.DirectionalLight(0xffffff, 1.8);
   keyLight.position.set(3.5, 4.0, 2.5);                // raking angle -> carved letters catch light
   scene.add(keyLight);
-  const COUNT=59; const frames=[];
-  for(let i=0;i<COUNT;i++){
-    const tex=await new THREE.TextureLoader().loadAsync(`assets/monolith-loop/set-1/${String(i).padStart(2,'0')}.jpg`);
+  const frames=[];
+  for(const src of MONOLITH_LOOP_IMAGES){
+    const tex=await new THREE.TextureLoader().loadAsync(src);
     tex.colorSpace=THREE.SRGBColorSpace; tex.wrapS=THREE.RepeatWrapping; tex.wrapT=THREE.ClampToEdgeWrapping;
     tex.center.set(0.5,0.5); tex.repeat.set(1,0.667);
     tex.channel=1;   // read uv1 -> image wraps continuously around the 4 side faces
@@ -470,7 +472,7 @@ async function initWebGLMonolith(){
         roughnessFactor = mix(roughnessFactor, 0.6, gEngrave);`)
         .replace('#include <opaque_fragment>',
         `#include <opaque_fragment>
-        gl_FragColor.rgb += vec3(clamp(gPulse * gLetter * 0.22, 0.0, 0.22)); // white glow rolls through the wave
+        gl_FragColor.rgb += vec3(clamp(gPulse * gLetter * 0.55, 0.0, 0.55)); // white glow rolls through the wave, still visible on black hold
         gl_FragColor.rgb = min(gl_FragColor.rgb, vec3(1.0));`);
   };
 
