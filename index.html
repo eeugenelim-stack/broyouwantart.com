@@ -410,13 +410,13 @@ function buildMonolithV2(){
   const buildFallback = ()=>{
     field.classList.add('monolith-v2-fallback');
     const slabs = [
-      {x:'-44vw',y:'8vh',ry:'-70deg',rz:'-.35deg',w:'clamp(92px,16vw,190px)',h:'clamp(330px,63vh,640px)',mw:'clamp(58px,20vw,112px)',mh:'clamp(290px,58vh,520px)'},
-      {x:'-31vw',y:'1vh',ry:'-20deg',rz:'.2deg',w:'clamp(120px,19vw,230px)',h:'clamp(450px,82vh,790px)',mw:'clamp(74px,24vw,132px)',mh:'clamp(360px,74vh,650px)'},
-      {x:'-17vw',y:'10vh',ry:'18deg',rz:'-.12deg',w:'clamp(96px,15vw,180px)',h:'clamp(340px,64vh,630px)',mw:'clamp(62px,20vw,110px)',mh:'clamp(310px,61vh,560px)'},
-      {x:'0vw',y:'-2vh',ry:'-5deg',rz:'.18deg',w:'clamp(136px,22vw,270px)',h:'clamp(520px,91vh,850px)',mw:'clamp(84px,27vw,148px)',mh:'clamp(410px,82vh,720px)'},
-      {x:'17vw',y:'7vh',ry:'58deg',rz:'-.25deg',w:'clamp(104px,17vw,205px)',h:'clamp(380px,70vh,680px)',mw:'clamp(64px,21vw,118px)',mh:'clamp(340px,67vh,600px)'},
-      {x:'32vw',y:'-1vh',ry:'9deg',rz:'.12deg',w:'clamp(128px,20vw,245px)',h:'clamp(470px,84vh,800px)',mw:'clamp(78px,24vw,138px)',mh:'clamp(390px,76vh,680px)'},
-      {x:'45vw',y:'10vh',ry:'-54deg',rz:'.28deg',w:'clamp(88px,15vw,175px)',h:'clamp(310px,58vh,590px)',mw:'clamp(54px,18vw,102px)',mh:'clamp(280px,56vh,500px)'}
+      {x:'-43vw',y:'22vh',ry:'-70deg',rz:'-.12deg',w:'clamp(150px,25vw,295px)',h:'clamp(220px,39vh,400px)',mw:'clamp(84px,28vw,154px)',mh:'clamp(215px,39vh,350px)'},
+      {x:'-30vw',y:'15vh',ry:'-20deg',rz:'.06deg',w:'clamp(170px,27vw,320px)',h:'clamp(290px,53vh,525px)',mw:'clamp(96px,31vw,176px)',mh:'clamp(270px,52vh,460px)'},
+      {x:'-15vw',y:'21vh',ry:'18deg',rz:'-.04deg',w:'clamp(145px,23vw,275px)',h:'clamp(235px,43vh,430px)',mw:'clamp(88px,27vw,154px)',mh:'clamp(230px,44vh,400px)'},
+      {x:'1vw',y:'17vh',ry:'-5deg',rz:'.05deg',w:'clamp(198px,31vw,365px)',h:'clamp(285px,52vh,505px)',mw:'clamp(108px,35vw,195px)',mh:'clamp(270px,52vh,455px)'},
+      {x:'17vw',y:'19vh',ry:'58deg',rz:'-.08deg',w:'clamp(158px,25vw,300px)',h:'clamp(255px,48vh,470px)',mw:'clamp(92px,29vw,160px)',mh:'clamp(250px,48vh,430px)'},
+      {x:'32vw',y:'14vh',ry:'9deg',rz:'.04deg',w:'clamp(186px,30vw,355px)',h:'clamp(300px,55vh,535px)',mw:'clamp(104px,33vw,185px)',mh:'clamp(285px,55vh,485px)'},
+      {x:'45vw',y:'22vh',ry:'-54deg',rz:'.1deg',w:'clamp(146px,24vw,285px)',h:'clamp(215px,39vh,395px)',mw:'clamp(82px,28vw,150px)',mh:'clamp(210px,39vh,345px)'}
     ];
     field.innerHTML = slabs.map((v)=>`<i class="monolith-v2-slab" style="--x:${v.x};--y:${v.y};--ry:${v.ry};--rz:${v.rz};--w:${v.w};--h:${v.h};--mw:${v.mw};--mh:${v.mh};"></i>`).join('');
   };
@@ -438,8 +438,8 @@ function buildMonolithV2(){
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog(0xf6f5f1, 7, 30);
     const camera = new THREE.PerspectiveCamera(38, 1, .1, 80);
-    camera.position.set(0, 1.7, 11.8);
-    camera.lookAt(0, 1.0, 0);
+    camera.position.set(0, 1.05, 11.2);
+    camera.lookAt(0, .15, 0);
     const group = new THREE.Group();
     scene.add(group);
     scene.add(new THREE.HemisphereLight(0xffffff,0x2a211b,1.65));
@@ -447,8 +447,8 @@ function buildMonolithV2(){
     const side = new THREE.DirectionalLight(0xffffff,.72); side.position.set(5,3,-2); scene.add(side);
     const baseMat = new THREE.MeshStandardMaterial({color:0x201812,roughness:.88,metalness:.34});
     const configs = [
-      [-5.55,.35,-2.3,1.35,5.7,.18,-.68],[-3.62,.92,.9,1.62,7.55,.20,-.20],[-1.82,.28,-4.35,1.22,6.0,.18,.34],
-      [-.08,1.02,-.9,1.86,8.35,.20,-.05],[1.92,.38,2.25,1.34,6.55,.18,.58],[3.78,.88,-3.0,1.70,7.65,.20,.10],[5.30,.22,.05,1.18,5.35,.18,-.74],[-.70,-.10,4.05,1.42,5.75,.18,-.36]
+      [-5.55,-.35,-2.3,2.25,4.0,.18,-.68],[-3.62,.15,.9,2.35,5.0,.19,-.20],[-1.82,-.28,-4.35,1.95,4.15,.18,.34],
+      [-.04,.05,-1.25,2.78,4.80,.20,-.05],[2.02,-.12,2.25,2.20,4.45,.18,.58],[3.90,.20,-3.0,2.65,5.10,.19,.10],[5.42,-.45,.05,2.05,3.80,.18,-.74],[-.70,-.35,4.05,2.25,4.0,.18,-.36]
     ];
     const slabs = configs.map((c,i)=>{
       const [x,y,z,w,h,d,ry]=c;
@@ -488,8 +488,8 @@ function buildMonolithV2(){
       if(!active) return;
       const targetX = pointer.x * 1.35 + scrollOffset * 1.1;
       camera.position.x += (targetX - camera.position.x) * .045;
-      camera.position.z += ((11.8 - Math.abs(scrollOffset)*.9) - camera.position.z) * .035;
-      camera.lookAt(pointer.x * .45, 1.0 - pointer.y*.18, 0);
+      camera.position.z += ((11.2 - Math.abs(scrollOffset)*.75) - camera.position.z) * .035;
+      camera.lookAt(pointer.x * .45, .15 - pointer.y*.12, 0);
       slabs.forEach((slab,i)=>{ slab.rotation.y += ((configs[i][6] + pointer.x*.045) - slab.rotation.y) * .035; });
       renderer.render(scene,camera);
       frame = requestAnimationFrame(render);
