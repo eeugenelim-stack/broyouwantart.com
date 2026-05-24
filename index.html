@@ -549,11 +549,14 @@ function buildMonolithV2(){
         const visible = pts.some((p)=>p.z > -1 && p.z < 1 && p.x>-w*.2 && p.x<w*1.2 && p.y>-h*.2 && p.y<h*1.2);
         if(!visible) return;
         const baseAlpha = slabIndex%3===0 ? .62 : .46;
+        const frontEdges = [[0,1],[1,3],[3,2],[2,0]];
+        const sideEdges = mesh.rotation.y >= 0 ? [[1,5],[5,7],[7,3]] : [[0,4],[4,6],[6,2]];
+        const drawnEdges = frontEdges.concat(sideEdges);
         for(let pass=0; pass<3; pass++){
-          drawCtx.strokeStyle = pass===0 ? `rgba(10,8,7,${baseAlpha})` : `rgba(32,22,16,${.18-pass*.035})`;
-          drawCtx.lineWidth = pass===0 ? .82 : .48;
-          const amt = pass===0 ? .9 : 1.9 + pass*.75;
-          slabEdges.forEach(([a,b],edgeIndex)=>roughLine(drawCtx, pts[a], pts[b], amt, slabIndex*19+edgeIndex*11+pass*37));
+          drawCtx.strokeStyle = pass===0 ? `rgba(10,8,7,${baseAlpha})` : `rgba(32,22,16,${.16-pass*.035})`;
+          drawCtx.lineWidth = pass===0 ? .86 : .46;
+          const amt = pass===0 ? .85 : 1.7 + pass*.62;
+          drawnEdges.forEach(([a,b],edgeIndex)=>roughLine(drawCtx, pts[a], pts[b], amt, slabIndex*19+edgeIndex*11+pass*37));
         }
         // Sparse Schiele-ish surface scratches; projected onto the front plane.
         drawCtx.strokeStyle = 'rgba(20,13,9,.16)'; drawCtx.lineWidth = .42;
