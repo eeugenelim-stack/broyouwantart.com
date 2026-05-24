@@ -447,9 +447,10 @@ function buildMonolithV2(){
     field.appendChild(renderer.domElement);
     const scene = new THREE.Scene();
     scene.fog = new THREE.Fog(0xf6f5f1, 7, 30);
-    const camera = new THREE.PerspectiveCamera(38, 1, .1, 80);
-    camera.position.set(0, 1.05, 11.2);
-    camera.lookAt(0, .15, 0);
+    // Pulled-back, Stonehenge-like viewpoint: wider field, lower eye line, more floor/air around the slabs.
+    const camera = new THREE.PerspectiveCamera(42, 1, .1, 80);
+    camera.position.set(0, .78, 13.55);
+    camera.lookAt(0, -.04, 0);
     const group = new THREE.Group();
     scene.add(group);
     // Fixed gallery light: one high-left key controls the slab shading and cast shadows.
@@ -616,8 +617,8 @@ function buildMonolithV2(){
       if(!active) return;
       const targetX = pointer.x * 1.35 + scrollOffset * 1.1;
       camera.position.x += (targetX - camera.position.x) * .045;
-      camera.position.z += ((11.2 - Math.abs(scrollOffset)*.75) - camera.position.z) * .035;
-      camera.lookAt(pointer.x * .45, .15 - pointer.y*.12, 0);
+      camera.position.z += ((13.55 - Math.abs(scrollOffset)*.85) - camera.position.z) * .035;
+      camera.lookAt(pointer.x * .52, -.04 - pointer.y*.10, 0);
       slabs.forEach((slab,i)=>{ slab.rotation.y += ((configs[i][6] + pointer.x*.045) - slab.rotation.y) * .035; });
       renderer.render(scene,camera);
       renderDrawnOverlay(performance.now());
