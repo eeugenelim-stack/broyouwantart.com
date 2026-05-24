@@ -101,9 +101,9 @@ body.monolith-v2:not(.monolith-entered):not(.in-project) .monolith-stage::after{
 .monolith-v2-field{position:absolute;inset:0;z-index:1;opacity:1;transition:opacity .62s ease,filter .62s ease,transform .72s cubic-bezier(.2,.8,.2,1);}
 .monolith-v2-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
 .monolith-v2-draw-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:4;pointer-events:none;mix-blend-mode:multiply;opacity:.88;}
-body.monolith-v2-drawn:not(.monolith-entered):not(.in-project) .monolith-stage{background:linear-gradient(180deg,#f4f3ee 0%,#edeae2 58%,#aaa69d 58%,#8f8b82 100%);}
+body.monolith-v2-drawn:not(.monolith-entered):not(.in-project) .monolith-stage{background:linear-gradient(180deg,#f5f4ef 0%,#ece9e1 58%,#9d9990 58%,#858178 100%);}
 body.monolith-v2-drawn .monolith-v2-canvas{filter:grayscale(1) contrast(1.08);opacity:1;}
-body.monolith-v2-drawn .monolith-v2-slab{background:linear-gradient(102deg,#2a2925 0%,#706c63 22%,#191817 44%,#aaa59a 61%,#302f2b 82%,#111 100%);box-shadow:inset 16px 0 30px rgba(255,255,255,.10),inset -22px 0 42px rgba(0,0,0,.46),0 24px 66px rgba(20,19,17,.28);}
+body.monolith-v2-drawn .monolith-v2-slab{background:linear-gradient(104deg,#151515 0%,#45433f 28%,#c9c5ba 52%,#5f5b54 71%,#111 100%);box-shadow:inset 18px 0 32px rgba(255,255,255,.12),inset -24px 0 46px rgba(0,0,0,.5),0 28px 76px rgba(12,12,11,.24);}
 body.monolith-v2-drawn .monolith-v2-ui{color:rgba(0,0,0,.52)}
 body.monolith-zooming .monolith-v2-field{opacity:0;filter:blur(10px);transform:scale(1.04);}
 .monolith-v2-ui{position:absolute;z-index:7;left:16px;right:16px;bottom:18px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;pointer-events:none;text-transform:uppercase;letter-spacing:.055em;font-size:13px;line-height:.92;color:rgba(0,0,0,.46)}
@@ -111,7 +111,7 @@ body.monolith-zooming .monolith-v2-field{opacity:0;filter:blur(10px);transform:s
 .monolith-v2-fallback{position:absolute;inset:0;z-index:1;transform-style:preserve-3d;perspective:900px;overflow:hidden;}
 .monolith-v2-slab{position:absolute;top:46%;left:50%;width:var(--w,clamp(58px,12vw,138px));height:var(--h,clamp(360px,76vh,760px));background:linear-gradient(100deg,#17130f 0%,#33271d 18%,#0c0b0a 42%,#4a3828 56%,#181512 79%,#070707 100%);box-shadow:inset 10px 0 26px rgba(255,238,204,.12),inset -14px 0 34px rgba(0,0,0,.64),0 26px 74px rgba(30,25,20,.22);border:1px solid rgba(0,0,0,.34);transform:translate(-50%,-50%) translateX(var(--x)) translateY(var(--y)) rotateY(var(--ry)) rotateZ(var(--rz));opacity:.96;}
 .monolith-v2-slab::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.15),transparent 22%,rgba(0,0,0,.2) 61%,rgba(255,255,255,.08));mix-blend-mode:screen;opacity:.68;}
-body.monolith-v2-drawn .monolith-v2-slab::before{content:'';position:absolute;left:100%;top:-1px;width:clamp(26px,4vw,56px);height:calc(100% + 2px);background:linear-gradient(100deg,#1b1a18,#58554e 54%,#111);transform-origin:left center;transform:skewY(-3deg);opacity:.58;filter:blur(.1px);}
+body.monolith-v2-drawn .monolith-v2-slab::before{content:'';position:absolute;left:100%;top:-1px;width:clamp(26px,4vw,56px);height:calc(100% + 2px);background:linear-gradient(100deg,#181818,#6b6860 54%,#101010);transform-origin:left center;transform:skewY(-3deg);opacity:.58;filter:blur(.1px);}
 @media(max-width:760px){.monolith-v2-ui{left:10px;right:10px;bottom:14px;font-size:11px}.monolith-v2-actions{gap:10px}.monolith-v2-actions button{font-size:11px}.monolith-v2-copy{max-width:31ch}.monolith-v2-slab{top:47%;--w:var(--mw,clamp(48px,17vw,92px));--h:var(--mh,clamp(360px,78vh,640px))}}
 @media(prefers-reduced-motion:reduce){.monolith-v2-field{transition:none}}
 
@@ -441,6 +441,8 @@ function buildMonolithV2(){
     const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true, powerPreference:'high-performance'});
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.setClearColor(0xf6f5f1, 0);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.domElement.className = 'monolith-v2-canvas';
     field.appendChild(renderer.domElement);
     const scene = new THREE.Scene();
@@ -450,10 +452,26 @@ function buildMonolithV2(){
     camera.lookAt(0, .15, 0);
     const group = new THREE.Group();
     scene.add(group);
-    scene.add(new THREE.HemisphereLight(0xffffff,0x2a211b,1.65));
-    const key = new THREE.DirectionalLight(0xfff1dc,2.4); key.position.set(-4,7,7); scene.add(key);
-    const side = new THREE.DirectionalLight(0xffffff,.72); side.position.set(5,3,-2); scene.add(side);
-    const baseMat = new THREE.MeshStandardMaterial({color:0x4b4943,roughness:.98,metalness:.04});
+    // Fixed gallery light: one high-left key controls the slab shading and cast shadows.
+    // Low neutral fill keeps detail visible without reintroducing coloured surface tints.
+    scene.add(new THREE.HemisphereLight(0xfaf8f0,0x6d6a62,0.46));
+    const key = new THREE.DirectionalLight(0xffffff,3.15);
+    key.position.set(-5.4,8.2,6.4);
+    key.target.position.set(0,-1.05,0.2);
+    key.castShadow = true;
+    key.shadow.mapSize.set(2048,2048);
+    key.shadow.camera.left = -8;
+    key.shadow.camera.right = 8;
+    key.shadow.camera.top = 7;
+    key.shadow.camera.bottom = -7;
+    key.shadow.camera.near = 1;
+    key.shadow.camera.far = 22;
+    key.shadow.bias = -0.00018;
+    key.shadow.radius = 6;
+    key.shadow.blurSamples = 10;
+    scene.add(key);
+    scene.add(key.target);
+    const baseMat = new THREE.MeshStandardMaterial({color: drawnPreview ? 0x6c6962 : 0x3b332e, roughness:.97, metalness:0});
     const configs = [
       [-5.55,-.35,-2.3,2.25,4.0,.72,-.68],[-3.62,.15,.9,2.35,5.0,.76,-.20],[-1.82,-.28,-4.35,1.95,4.15,.72,.34],
       [-.04,.05,-1.25,2.78,4.80,.80,-.05],[2.02,-.12,2.25,2.20,4.45,.72,.58],[3.90,.20,-3.0,2.65,5.10,.76,.10],[5.42,-.45,.05,2.05,3.80,.72,-.74],[-.70,-.35,4.05,2.25,4.0,.72,-.36]
@@ -471,25 +489,37 @@ function buildMonolithV2(){
       pos.needsUpdate = true;
       geo.computeVertexNormals();
       const mat = baseMat.clone();
-      const tint = drawnPreview ? [0x1f1f1d,0x55524c,0x2d2c29,0x736f66,0x3d3b36,0x656158,0x161616,0x4e4b45][i%8] : [0x1a120e,0x34251a,0x0f0f0e,0x3a2b1f,0x18120f,0x4b3827,0x0b0a09,0x2a2018][i%8];
-      mat.color.setHex(tint);
+      // No per-slab colour palette in drawn mode: the variation now comes from real light,
+      // surface angle, and cast shadow instead of separate coloured materials.
+      mat.color.setHex(drawnPreview ? 0x6c6962 : 0x2f2925);
+      mat.roughness = drawnPreview ? .99 : .94;
       const mesh = new THREE.Mesh(geo, mat);
       mesh.position.set(x,y,z); mesh.rotation.y = ry; mesh.rotation.z = (i%2? .008:-.006);
       mesh.userData.slab = {w,h,d,index:i};
-      mesh.castShadow = false; mesh.receiveShadow = false;
+      mesh.castShadow = true; mesh.receiveShadow = true;
       group.add(mesh);
       return mesh;
     });
-    const floorMat = new THREE.MeshStandardMaterial({color: drawnPreview ? 0x8f8b82 : 0xd8d4c9, roughness:.98, metalness:0});
+    const floorMat = new THREE.MeshStandardMaterial({color: drawnPreview ? 0x8b8780 : 0xd8d4c9, roughness:1, metalness:0});
     const floor = new THREE.Mesh(new THREE.PlaneGeometry(54,34,1,1), floorMat);
-    floor.rotation.x = -Math.PI/2; floor.position.y = -2.35; floor.position.z = 1.5; scene.add(floor);
+    floor.rotation.x = -Math.PI/2; floor.position.y = -2.35; floor.position.z = 1.5; floor.receiveShadow = true; scene.add(floor);
     const grid = new THREE.GridHelper(54,18, drawnPreview ? 0x5f5b54 : 0xc8c3b8, drawnPreview ? 0x77736a : 0xd6d1c7);
-    grid.position.y = -2.345; grid.position.z = 1.5; grid.material.transparent = true; grid.material.opacity = drawnPreview ? .16 : .08; scene.add(grid);
-    const contactMat = new THREE.MeshBasicMaterial({color:0x11100f,transparent:true,opacity:drawnPreview?.12:.055,depthWrite:false});
+    grid.position.y = -2.342; grid.position.z = 1.5; grid.material.transparent = true; grid.material.opacity = drawnPreview ? .12 : .06; scene.add(grid);
+    const shadowCanvas = document.createElement('canvas');
+    shadowCanvas.width = shadowCanvas.height = 256;
+    const shadowCtx = shadowCanvas.getContext('2d');
+    const shadowGrad = shadowCtx.createRadialGradient(128,128,8,128,128,126);
+    shadowGrad.addColorStop(0,'rgba(0,0,0,.46)');
+    shadowGrad.addColorStop(.42,'rgba(0,0,0,.17)');
+    shadowGrad.addColorStop(1,'rgba(0,0,0,0)');
+    shadowCtx.fillStyle = shadowGrad;
+    shadowCtx.fillRect(0,0,256,256);
+    const contactShadowTex = new THREE.CanvasTexture(shadowCanvas);
+    const contactMat = new THREE.MeshBasicMaterial({map:contactShadowTex,transparent:true,opacity:drawnPreview?.24:.11,depthWrite:false});
     const contactShadows = configs.map((c)=>{
       const [x,,z,w,,d,ry]=c;
-      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(Math.max(1.6,w*1.15), Math.max(1.3,d*2.2)), contactMat.clone());
-      shadow.rotation.x = -Math.PI/2; shadow.rotation.z = -ry*.22; shadow.position.set(x,-2.338,z+.28);
+      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(Math.max(1.9,w*1.35), Math.max(1.55,d*3.15)), contactMat.clone());
+      shadow.rotation.x = -Math.PI/2; shadow.rotation.z = -ry*.22; shadow.position.set(x,-2.337,z+.36);
       scene.add(shadow); return shadow;
     });
     let drawCanvas=null, drawCtx=null, drawDpr=1, jitterSeed=[], nextJitter=0;
@@ -553,13 +583,13 @@ function buildMonolithV2(){
         const sideEdges = mesh.rotation.y >= 0 ? [[1,5],[5,7],[7,3]] : [[0,4],[4,6],[6,2]];
         const drawnEdges = frontEdges.concat(sideEdges);
         for(let pass=0; pass<3; pass++){
-          drawCtx.strokeStyle = pass===0 ? `rgba(10,8,7,${baseAlpha})` : `rgba(32,22,16,${.16-pass*.035})`;
+          drawCtx.strokeStyle = pass===0 ? `rgba(8,8,8,${baseAlpha})` : `rgba(38,38,36,${.16-pass*.035})`;
           drawCtx.lineWidth = pass===0 ? .86 : .46;
           const amt = pass===0 ? .85 : 1.7 + pass*.62;
           drawnEdges.forEach(([a,b],edgeIndex)=>roughLine(drawCtx, pts[a], pts[b], amt, slabIndex*19+edgeIndex*11+pass*37));
         }
         // Sparse Schiele-ish surface scratches; projected onto the front plane.
-        drawCtx.strokeStyle = 'rgba(20,13,9,.16)'; drawCtx.lineWidth = .42;
+        drawCtx.strokeStyle = 'rgba(12,12,11,.16)'; drawCtx.lineWidth = .42;
         for(let k=0;k<6;k++){
           const lx = (-data.w*.38) + (k*.15%1)*data.w*.76 + ((jitterSeed[(slabIndex*23+k)%jitterSeed.length]?.x||0)*data.w*.035);
           const y1 = -data.h*.32 + k*data.h*.11;
@@ -597,7 +627,7 @@ function buildMonolithV2(){
     render();
     cleanupFns.push(()=>{
       active=false; if(frame) cancelAnimationFrame(frame); renderer.dispose();
-      slabs.forEach((slab)=>{slab.geometry.dispose(); slab.material.dispose();}); contactShadows.forEach((shadow)=>{shadow.geometry.dispose(); shadow.material.dispose();}); floor.geometry.dispose(); floor.material.dispose(); grid.geometry.dispose(); grid.material.dispose();
+      slabs.forEach((slab)=>{slab.geometry.dispose(); slab.material.dispose();}); contactShadows.forEach((shadow)=>{shadow.geometry.dispose(); shadow.material.dispose();}); contactShadowTex.dispose(); floor.geometry.dispose(); floor.material.dispose(); grid.geometry.dispose(); grid.material.dispose();
       renderer.domElement.remove();
     });
   }).catch((error)=>{
