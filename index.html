@@ -100,6 +100,9 @@ body.monolith-v2:not(.monolith-entered):not(.in-project) .monolith-stage::before
 body.monolith-v2:not(.monolith-entered):not(.in-project) .monolith-stage::after{content:none;}
 .monolith-v2-field{position:absolute;inset:0;z-index:1;opacity:1;transition:opacity .62s ease,filter .62s ease,transform .72s cubic-bezier(.2,.8,.2,1);}
 .monolith-v2-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.monolith-v2-draw-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:4;pointer-events:none;mix-blend-mode:multiply;opacity:.88;}
+body.monolith-v2-drawn .monolith-v2-canvas{filter:saturate(.86) contrast(.96);opacity:.86;}
+body.monolith-v2-drawn .monolith-v2-ui{color:rgba(0,0,0,.52)}
 body.monolith-zooming .monolith-v2-field{opacity:0;filter:blur(10px);transform:scale(1.04);}
 .monolith-v2-ui{position:absolute;z-index:7;left:16px;right:16px;bottom:18px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;pointer-events:none;text-transform:uppercase;letter-spacing:.055em;font-size:13px;line-height:.92;color:rgba(0,0,0,.46)}
 .monolith-v2-copy{max-width:48ch}.monolith-v2-actions{display:flex;gap:14px;pointer-events:auto}.monolith-v2-actions button{font-size:13px;line-height:.92;color:rgba(0,0,0,.48);text-transform:uppercase}.monolith-v2-actions button:hover,.monolith-v2-actions button:focus-visible{color:#050505}.monolith-v2-actions button:focus-visible{outline:1px solid currentColor;outline-offset:3px}.monolith-v2-actions button:first-child{color:#050505}
@@ -385,7 +388,9 @@ function stopMonolithV2(){
 }
 function shouldUseMonolithV2(){ return params.get('monolith') === 'v2'; }
 function buildMonolithV2(){
+  const drawnPreview = params.get('drawn') === '1';
   document.body.classList.add('monolith-ready','monolith-v2');
+  document.body.classList.toggle('monolith-v2-drawn', drawnPreview);
   if(!monolithStage) return;
   stopWebGLMonolith();
   stopMobileMonolithSlideshow();
@@ -422,7 +427,7 @@ function buildMonolithV2(){
   };
   if(cssOnly){
     buildFallback();
-    monolithV2Cleanup = ()=>{cleanupFns.forEach(fn=>fn()); field.innerHTML=''; document.body.classList.remove('monolith-v2');};
+    monolithV2Cleanup = ()=>{cleanupFns.forEach(fn=>fn()); field.innerHTML=''; document.body.classList.remove('monolith-v2','monolith-v2-drawn');};
     return;
   }
   buildFallback();
@@ -467,12 +472,88 @@ function buildMonolithV2(){
       mat.color.setHex(tint);
       const mesh = new THREE.Mesh(geo, mat);
       mesh.position.set(x,y,z); mesh.rotation.y = ry; mesh.rotation.z = (i%2? .008:-.006);
+      mesh.userData.slab = {w,h,d,index:i};
       mesh.castShadow = false; mesh.receiveShadow = false;
       group.add(mesh);
       return mesh;
     });
     const floor = new THREE.Mesh(new THREE.PlaneGeometry(48,30), new THREE.ShadowMaterial({color:0x111111,opacity:.075}));
     floor.rotation.x = -Math.PI/2; floor.position.y = -2.35; scene.add(floor);
+    let drawCanvas=null, drawCtx=null, drawDpr=1, jitterSeed=[], nextJitter=0;
+    const slabEdges = [[0,1],[1,3],[3,2],[2,0],[4,5],[5,7],[7,6],[6,4],[0,4],[1,5],[2,6],[3,7]];
+    const localCorners = (w,h,d)=>[
+      [-w/2,-h/2,d/2],[w/2,-h/2,d/2],[-w/2,h/2,d/2],[w/2,h/2,d/2],
+      [-w/2,-h/2,-d/2],[w/2,-h/2,-d/2],[-w/2,h/2,-d/2],[w/2,h/2,-d/2]
+    ];
+    const projectPoint = (mesh, point)=>{
+      const v = new THREE.Vector3(point[0], point[1], point[2]);
+      mesh.localToWorld(v); v.project(camera);
+      return {x:(v.x*.5+.5)*(drawCanvas.width/drawDpr), y:(-.5*v.y+.5)*(drawCanvas.height/drawDpr), z:v.z};
+    };
+    const roughLine = (ctx, a, b, amount, seedOffset)=>{
+      const steps = 7;
+      ctx.beginPath();
+      for(let i=0;i<=steps;i++){
+        const t=i/steps;
+        const s = jitterSeed[(seedOffset+i)%Math.max(1,jitterSeed.length)] || {x:0,y:0};
+        const taper = Math.sin(Math.PI*t);
+        const x = a.x + (b.x-a.x)*t + s.x*amount*(.35+taper);
+        const y = a.y + (b.y-a.y)*t + s.y*amount*(.35+taper);
+        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    };
+    const refreshJitter = ()=>{
+      jitterSeed = Array.from({length:180},()=>({x:(Math.random()*2-1),y:(Math.random()*2-1)}));
+    };
+    if(drawnPreview){
+      drawCanvas = document.createElement('canvas');
+      drawCanvas.className='monolith-v2-draw-canvas';
+      drawCanvas.setAttribute('aria-hidden','true');
+      field.appendChild(drawCanvas);
+      drawCtx = drawCanvas.getContext('2d');
+      refreshJitter();
+      cleanupFns.push(()=>{ if(drawCanvas) drawCanvas.remove(); drawCanvas=null; drawCtx=null; });
+    }
+    const resizeDrawnOverlay = ()=>{
+      if(!drawCanvas) return;
+      drawDpr = Math.min(window.devicePixelRatio || 1, 1.75);
+      const w = monolithStage.clientWidth || window.innerWidth, h = monolithStage.clientHeight || window.innerHeight;
+      drawCanvas.width = Math.max(1, Math.floor(w*drawDpr));
+      drawCanvas.height = Math.max(1, Math.floor(h*drawDpr));
+      drawCanvas.style.width = `${w}px`; drawCanvas.style.height = `${h}px`;
+      drawCtx.setTransform(drawDpr,0,0,drawDpr,0,0);
+    };
+    const renderDrawnOverlay = (now)=>{
+      if(!drawCtx || !drawCanvas) return;
+      if(now > nextJitter){ refreshJitter(); nextJitter = now + 105 + Math.random()*90; }
+      const w = drawCanvas.width/drawDpr, h = drawCanvas.height/drawDpr;
+      drawCtx.clearRect(0,0,w,h);
+      drawCtx.lineCap='round'; drawCtx.lineJoin='round';
+      slabs.forEach((mesh, slabIndex)=>{
+        const data = mesh.userData.slab;
+        const pts = localCorners(data.w,data.h,data.d).map((p)=>projectPoint(mesh,p));
+        const visible = pts.some((p)=>p.z > -1 && p.z < 1 && p.x>-w*.2 && p.x<w*1.2 && p.y>-h*.2 && p.y<h*1.2);
+        if(!visible) return;
+        const baseAlpha = slabIndex%3===0 ? .62 : .46;
+        for(let pass=0; pass<3; pass++){
+          drawCtx.strokeStyle = pass===0 ? `rgba(10,8,7,${baseAlpha})` : `rgba(32,22,16,${.18-pass*.035})`;
+          drawCtx.lineWidth = pass===0 ? .82 : .48;
+          const amt = pass===0 ? .9 : 1.9 + pass*.75;
+          slabEdges.forEach(([a,b],edgeIndex)=>roughLine(drawCtx, pts[a], pts[b], amt, slabIndex*19+edgeIndex*11+pass*37));
+        }
+        // Sparse Schiele-ish surface scratches; projected onto the front plane.
+        drawCtx.strokeStyle = 'rgba(20,13,9,.16)'; drawCtx.lineWidth = .42;
+        for(let k=0;k<6;k++){
+          const lx = (-data.w*.38) + (k*.15%1)*data.w*.76 + ((jitterSeed[(slabIndex*23+k)%jitterSeed.length]?.x||0)*data.w*.035);
+          const y1 = -data.h*.32 + k*data.h*.11;
+          const y2 = y1 + data.h*(.045 + (k%3)*.018);
+          const a = projectPoint(mesh,[lx,y1,data.d/2+.003]);
+          const b = projectPoint(mesh,[lx + data.w*(.02*((k%2)*2-1)),y2,data.d/2+.003]);
+          roughLine(drawCtx,a,b,1.1,slabIndex*29+k*13);
+        }
+      });
+    };
     const pointer = {x:0,y:0};
     const onPointer = (e)=>{ pointer.x = (e.clientX / Math.max(1,window.innerWidth) - .5); pointer.y = (e.clientY / Math.max(1,window.innerHeight) - .5); };
     window.addEventListener('pointermove', onPointer, {passive:true}); cleanupFns.push(()=>window.removeEventListener('pointermove', onPointer));
@@ -483,6 +564,7 @@ function buildMonolithV2(){
     const resize = ()=>{
       const w = monolithStage.clientWidth || window.innerWidth, h = monolithStage.clientHeight || window.innerHeight;
       renderer.setSize(w,h,false); camera.aspect = w/h; camera.updateProjectionMatrix();
+      resizeDrawnOverlay();
     };
     const render = ()=>{
       if(!active) return;
@@ -492,6 +574,7 @@ function buildMonolithV2(){
       camera.lookAt(pointer.x * .45, .15 - pointer.y*.12, 0);
       slabs.forEach((slab,i)=>{ slab.rotation.y += ((configs[i][6] + pointer.x*.045) - slab.rotation.y) * .035; });
       renderer.render(scene,camera);
+      renderDrawnOverlay(performance.now());
       frame = requestAnimationFrame(render);
     };
     resize(); window.addEventListener('resize', resize, {passive:true}); cleanupFns.push(()=>window.removeEventListener('resize', resize));
@@ -506,7 +589,7 @@ function buildMonolithV2(){
     console.warn('Monolith V2 WebGL failed; using CSS fallback.', error);
     if(!field.classList.contains('monolith-v2-fallback')) buildFallback();
   });
-  monolithV2Cleanup = ()=>{cleanupFns.forEach(fn=>fn()); field.innerHTML=''; document.body.classList.remove('monolith-v2');};
+  monolithV2Cleanup = ()=>{cleanupFns.forEach(fn=>fn()); field.innerHTML=''; document.body.classList.remove('monolith-v2','monolith-v2-drawn');};
 }
 
 function buildMonolith(){
