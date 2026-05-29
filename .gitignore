@@ -1,0 +1,15 @@
+# OS cruft
+.DS_Store
+**/.DS_Store
+
+# Culled images kept locally / for cloud backup — not for the public site
+_deleted/
+
+# Local working backups of index.html
+index-before-*.html
+
+# Studio / measurement tooling (dev-only, keep private)
+tools/
+
+# Claude local config
+.claude/
