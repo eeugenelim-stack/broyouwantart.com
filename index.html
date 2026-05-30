@@ -122,7 +122,7 @@ body.art-mode .book-media img{filter:brightness(.84) contrast(1.06) saturate(1.0
 .art-toggle{position:fixed;z-index:60;right:16px;bottom:16px;display:none;padding:9px 13px;font-family:inherit;font-size:12px;line-height:1;letter-spacing:-.02em;color:var(--red,#ff0000);background:rgba(0,0,0,.55);border:1px solid var(--red,#ff0000);border-radius:999px;cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:background .2s ease,color .2s ease,box-shadow .2s ease}
 .art-toggle:hover,.art-toggle:focus-visible{background:var(--red,#ff0000);color:#000;outline:none}
 .art-toggle:focus-visible{box-shadow:0 0 0 2px rgba(255,255,255,.6)}
-body.in-project .art-toggle{display:inline-block}
+body.in-project.project-has-art .art-toggle{display:inline-block}
 /* keep the exit control legible + clickable even when a "grow" blast floods the screen red */
 body.art-mode .art-toggle{z-index:10000;background:#000;color:#fff;border-color:#fff;box-shadow:0 0 20px rgba(0,0,0,.6)}
 body.art-mode .art-toggle:hover,body.art-mode .art-toggle:focus-visible{background:#fff;color:#000}
@@ -1185,6 +1185,10 @@ window.addEventListener('hashchange', route); route(); window.addEventListener('
     if(!glowCtx) return;
     const dpr=DPR(), W=innerWidth, H=innerHeight, diag=Math.hypot(W,H);
     glowCtx.setTransform(dpr,0,0,dpr,0,0); glowCtx.clearRect(0,0,W,H);
+    // If the page also has outward beams, contain each grow to its own panel so
+    // the full-screen engulf doesn't drown them. Pure-grow pages still engulf.
+    let hasOutward=false;
+    for(const o of OVERLAYS){ if((EYES[o.img.getAttribute('src')]||[]).some(e=>e.mode==='outward')){ hasOutward=true; break; } }
     const data=[]; let i=0;
     for(const o of OVERLAYS){
       const src=o.img.getAttribute('src');
@@ -1198,7 +1202,8 @@ window.addEventListener('hashchange', route); route(); window.addEventListener('
         if(t<0) r=0;
         else if(t<CHARGE) r=6+(t/CHARGE)*28;
         else if(t<CHARGE+FIRE){ const p=(t-CHARGE)/FIRE; r=34+p*110; }
-        else { const p=Math.min(1,(t-CHARGE-FIRE)/EXPAND); const eased=1-Math.pow(1-p,2.4); r=144+eased*(diag*1.6-144); }
+        else { const p=Math.min(1,(t-CHARGE-FIRE)/EXPAND); const eased=1-Math.pow(1-p,2.4); r=144+eased*(diag*1.6-144);
+          if(hasOutward){ const cap=Math.max(150,Math.min(box.width,box.height)*0.85); r=Math.min(r,cap); } }
         r*=0.94+0.05*Math.sin(performance.now()/55+i*1.3)+0.03*Math.sin(performance.now()/19); i++;
         data.push({vx,vy,r});
       }
@@ -1263,6 +1268,14 @@ window.addEventListener('hashchange', route); route(); window.addEventListener('
   function toggleArt(){ setArt(!document.body.classList.contains('art-mode')); }
   if(btn) btn.addEventListener('click',toggleArt);
 
+  // Only offer the button on projects that actually have eye data.
+  function updateArtAvail(){
+    let hasAny=false;
+    document.querySelectorAll('#projectGrid .book-media img').forEach(img=>{ if(EYES[img.getAttribute('src')]) hasAny=true; });
+    document.body.classList.toggle('project-has-art', hasAny);
+    if(!hasAny && document.body.classList.contains('art-mode')) setArt(false);
+  }
+
   // keyboard: type `art` to fire; Escape exits
   let buf='';
   window.addEventListener('keydown',(e)=>{
@@ -1273,7 +1286,8 @@ window.addEventListener('hashchange', route); route(); window.addEventListener('
     if(e.key && e.key.length===1){ buf=(buf+e.key.toLowerCase()).replace(/[^a-z]/g,'').slice(-3); if(buf==='art'){ toggleArt(); buf=''; } }
   });
 
-  window.addEventListener('hashchange',()=>{ if(document.body.classList.contains('art-mode')){ t0=performance.now(); requestAnimationFrame(buildOverlays); } });
+  window.addEventListener('hashchange',()=>{ updateArtAvail(); if(document.body.classList.contains('art-mode')){ t0=performance.now(); requestAnimationFrame(buildOverlays); } });
+  updateArtAvail();
   let rt; window.addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(()=>{ sizeGlow(); if(document.body.classList.contains('art-mode')) buildOverlays(); },150); });
 })();
 </script>
