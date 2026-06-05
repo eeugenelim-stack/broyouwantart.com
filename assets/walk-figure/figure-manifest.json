@@ -1,0 +1,14 @@
+{
+  "styles": [
+    "mine",
+    "contour",
+    "scribble",
+    "charcoal"
+  ],
+  "frames": 4,
+  "w": 928,
+  "h": 1400,
+  "framesByStyle": {
+    "mine": 4
+  }
+}

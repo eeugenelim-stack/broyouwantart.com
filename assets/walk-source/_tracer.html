@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Walk · Tracing Studio</title>
+<style>
+  :root{
+    --bg:#101113; --panel:#17181b; --line:#2a2c31; --ink:#e9e9ec; --dim:#9a9ca3;
+    --accent:#4f8cff;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{background:var(--bg);color:var(--ink);
+    font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;overflow:hidden;
+    display:grid;grid-template-rows:auto 1fr}
+  /* ---- top bar ---- */
+  .bar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+    padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line)}
+  .bar h1{font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:0;color:var(--dim)}
+  .group{display:flex;gap:7px;align-items:center;padding-right:14px;border-right:1px solid var(--line)}
+  .group:last-child{border-right:0}
+  select,button,input[type=number]{font:inherit;color:var(--ink);background:#202227;
+    border:1px solid var(--line);border-radius:6px;padding:5px 9px;cursor:pointer}
+  select{max-width:340px}
+  button:hover{border-color:#3a3d44}
+  button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  label{color:var(--dim);display:flex;gap:6px;align-items:center}
+  input[type=range]{width:108px;accent-color:var(--accent)}
+  .swatches{display:flex;gap:5px}
+  .sw{width:22px;height:22px;border-radius:50%;border:2px solid #000;cursor:pointer;
+    box-shadow:0 0 0 1px var(--line)}
+  .sw.on{box-shadow:0 0 0 2px #fff}
+  .count{color:var(--dim);font-size:12px}
+  /* ---- stage ---- */
+  #viewport{position:relative;overflow:hidden;background:
+    repeating-conic-gradient(#171717 0% 25%, #1d1d1d 0% 50%) 50%/22px 22px;
+    cursor:crosshair;touch-action:none}
+  #viewport.pan{cursor:grab}
+  #viewport.pan.grabbing{cursor:grabbing}
+  #stage{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform}
+  #stage img,#stage canvas{position:absolute;top:0;left:0;display:block}
+  #base{user-select:none;-webkit-user-drag:none}
+  #aiLines{mix-blend-mode:normal;opacity:0}
+  .hint{position:absolute;left:12px;bottom:10px;color:var(--dim);font-size:11px;
+    background:#0008;padding:6px 10px;border-radius:6px;pointer-events:none}
+  .empty{position:absolute;inset:0;display:grid;place-items:center;color:var(--dim)}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <h1>✎ Tracing&nbsp;Studio</h1>
+    <div class="group">
+      <button id="prev" title="Previous (←)">‹</button>
+      <select id="pick" title="Choose an image to trace over"></select>
+      <button id="next" title="Next (→)">›</button>
+      <span class="count" id="idx"></span>
+    </div>
+    <div class="group">
+      <div class="swatches" id="swatches"></div>
+      <input type="color" id="custom" value="#ff2d2d" title="Custom colour">
+    </div>
+    <div class="group">
+      <label>brush <input type="range" id="brush" min="1" max="60" value="6"><span id="brushv">6</span></label>
+      <button id="erase" title="Eraser (E)">erase</button>
+    </div>
+    <div class="group">
+      <label>photo <input type="range" id="opacity" min="0" max="100" value="65"></label>
+      <button id="aiToggle" title="Overlay my AI line-art if it exists">AI lines</button>
+    </div>
+    <div class="group">
+      <button id="undo" title="Undo (⌘Z / U)">undo</button>
+      <button id="clear" title="Clear all strokes">clear</button>
+    </div>
+    <div class="group">
+      <button id="fit" title="Fit to screen (F)">fit</button>
+      <span class="count" id="zoom">100%</span>
+    </div>
+    <div class="group">
+      <button id="dlTrace">↓ trace</button>
+      <button id="dlBoth">↓ trace+photo</button>
+    </div>
+  </div>
+
+  <div id="viewport">
+    <div id="stage">
+      <img id="base" alt="">
+      <img id="aiLines" alt="">
+      <canvas id="draw"></canvas>
+    </div>
+    <div class="hint">scroll = zoom · space-drag or right-drag = pan · draw with the pen</div>
+    <div class="empty" id="empty">loading images…</div>
+  </div>
+
+<script>
+const $ = s => document.querySelector(s);
+const vp = $('#viewport'), stage = $('#stage'), base = $('#base'),
+      ai = $('#aiLines'), cv = $('#draw'), ctx = cv.getContext('2d');
+
+const PALETTE = ['#e01414','#ff6e00','#ffc800','#149637','#005fd7','#6e2dc3','#e63782','#0f0f0f','#ffffff'];
+let color = PALETTE[0], brush = 6, erasing = false, showAI = false;
+let images = [], cur = -1;
+let scale = 1, panX = 0, panY = 0;
+let strokes = [], drawingStroke = null;
+let panning = false, spaceDown = false, panStart = null;
+
+/* ---------- build palette ---------- */
+const sw = $('#swatches');
+PALETTE.forEach((c,i)=>{
+  const b = document.createElement('div');
+  b.className = 'sw' + (i===0?' on':''); b.style.background = c; b.dataset.c = c;
+  b.onclick = ()=>{ setColor(c); erasing=false; $('#erase').classList.remove('on'); };
+  sw.appendChild(b);
+});
+function setColor(c){
+  color = c; erasing=false;
+  document.querySelectorAll('.sw').forEach(s=>s.classList.toggle('on', s.dataset.c===c));
+}
+$('#custom').oninput = e => { setColor(e.target.value); };
+
+/* ---------- load directory listing ---------- */
+(async ()=>{
+  try{
+    const html = await (await fetch('./')).text();
+    const doc = new DOMParser().parseFromString(html,'text/html');
+    images = [...doc.querySelectorAll('a')].map(a=>decodeURIComponent(a.getAttribute('href')))
+      .filter(h=>/\.(png|jpe?g|webp)$/i.test(h) && !h.startsWith('_'))
+      .sort();
+  }catch(e){ images = []; }
+  const pick = $('#pick');
+  images.forEach((n,i)=>{ const o=document.createElement('option'); o.value=i; o.textContent=n; pick.appendChild(o); });
+  if(images.length){ load(0); } else { $('#empty').textContent='No images found in this folder.'; }
+})();
+
+/* ---------- image switching ---------- */
+function load(i){
+  if(i<0||i>=images.length) return;
+  cur = i; $('#pick').value = i; $('#idx').textContent = `${i+1}/${images.length}`;
+  $('#empty').style.display='none';
+  strokes = []; drawingStroke = null;
+  base.onload = ()=>{
+    const w = base.naturalWidth, h = base.naturalHeight;
+    stage.style.width = w+'px'; stage.style.height = h+'px';
+    cv.width = w; cv.height = h;
+    redraw(); fit();
+  };
+  base.src = images[i];
+  // try matching AI line-art
+  const aiName = '../walk-lines/' + images[i].replace(/\.(jpe?g|webp)$/i,'.png');
+  ai.style.display='none';
+  ai.onload = ()=>{ if(showAI) ai.style.display='block'; };
+  ai.onerror = ()=>{ ai.removeAttribute('src'); };
+  ai.src = aiName;
+}
+$('#pick').onchange = e => load(+e.target.value);
+$('#prev').onclick = ()=> load((cur-1+images.length)%images.length);
+$('#next').onclick = ()=> load((cur+1)%images.length);
+
+/* ---------- view transform ---------- */
+function apply(){
+  stage.style.transform = `translate(${panX}px,${panY}px) scale(${scale})`;
+  $('#zoom').textContent = Math.round(scale*100)+'%';
+}
+function fit(){
+  const r = vp.getBoundingClientRect();
+  const w = base.naturalWidth||1, h = base.naturalHeight||1;
+  scale = Math.min(r.width/w, r.height/h)*0.92;
+  panX = (r.width - w*scale)/2; panY = (r.height - h*scale)/2;
+  apply();
+}
+$('#fit').onclick = fit;
+addEventListener('resize', ()=>{ if(cur>=0) fit(); });
+
+vp.addEventListener('wheel', e=>{
+  e.preventDefault();
+  const r = vp.getBoundingClientRect();
+  const mx = e.clientX-r.left, my = e.clientY-r.top;
+  const ix = (mx-panX)/scale, iy = (my-panY)/scale;
+  const f = e.deltaY<0 ? 1.12 : 1/1.12;
+  scale = Math.max(0.05, Math.min(40, scale*f));
+  panX = mx - ix*scale; panY = my - iy*scale;
+  apply();
+},{passive:false});
+
+/* ---------- pointer: draw + pan ---------- */
+function toImg(e){
+  const r = vp.getBoundingClientRect();
+  return { x:(e.clientX-r.left-panX)/scale, y:(e.clientY-r.top-panY)/scale };
+}
+vp.addEventListener('contextmenu', e=>e.preventDefault());
+vp.addEventListener('pointerdown', e=>{
+  vp.setPointerCapture(e.pointerId);
+  if(spaceDown || e.button===1 || e.button===2 || vp.classList.contains('pan')){
+    panning=true; vp.classList.add('grabbing'); panStart={x:e.clientX-panX,y:e.clientY-panY}; return;
+  }
+  const p = toImg(e);
+  drawingStroke = { color, size:brush/scale, erase:erasing, pts:[p] };
+});
+vp.addEventListener('pointermove', e=>{
+  if(panning){ panX=e.clientX-panStart.x; panY=e.clientY-panStart.y; apply(); return; }
+  if(!drawingStroke) return;
+  const p = toImg(e);
+  drawingStroke.pts.push(p);
+  drawStroke(drawingStroke, drawingStroke.pts.length-2);
+});
+function endStroke(e){
+  if(panning){ panning=false; vp.classList.remove('grabbing'); return; }
+  if(drawingStroke){ if(drawingStroke.pts.length) strokes.push(drawingStroke); drawingStroke=null; }
+}
+vp.addEventListener('pointerup', endStroke);
+vp.addEventListener('pointercancel', endStroke);
+
+/* ---------- rendering ---------- */
+function setStyle(s){
+  ctx.globalCompositeOperation = s.erase ? 'destination-out' : 'source-over';
+  ctx.strokeStyle = s.color; ctx.lineWidth = Math.max(.5,s.size);
+  ctx.lineCap='round'; ctx.lineJoin='round';
+}
+function drawStroke(s, fromIdx=0){
+  setStyle(s);
+  ctx.beginPath();
+  const pts = s.pts;
+  if(pts.length===1){ ctx.arc(pts[0].x,pts[0].y,Math.max(.5,s.size/2),0,7); ctx.fillStyle=s.color; if(!s.erase)ctx.fill(); return; }
+  const start = Math.max(1, fromIdx);
+  ctx.moveTo(pts[start-1].x, pts[start-1].y);
+  for(let i=start;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y);
+  ctx.stroke();
+}
+function redraw(){
+  ctx.clearRect(0,0,cv.width,cv.height);
+  for(const s of strokes) drawStroke(s,1);
+}
+$('#undo').onclick = ()=>{ strokes.pop(); redraw(); };
+$('#clear').onclick = ()=>{ strokes=[]; redraw(); };
+
+/* ---------- controls ---------- */
+$('#brush').oninput = e=>{ brush=+e.target.value; $('#brushv').textContent=brush; };
+$('#erase').onclick = e=>{ erasing=!erasing; e.target.classList.toggle('on',erasing); };
+$('#opacity').oninput = e=>{ base.style.opacity = e.target.value/100; };
+base.style.opacity = 0.65;
+$('#aiToggle').onclick = e=>{ showAI=!showAI; e.target.classList.toggle('on',showAI);
+  ai.style.display = (showAI && ai.getAttribute('src')) ? 'block' : 'none'; };
+
+/* ---------- pan via spacebar ---------- */
+addEventListener('keydown', e=>{
+  if(e.code==='Space'){ spaceDown=true; vp.classList.add('pan'); e.preventDefault(); }
+  else if(e.key==='e'||e.key==='E'){ $('#erase').click(); }
+  else if(e.key==='u'||e.key==='U'||(e.metaKey&&e.key==='z')){ $('#undo').click(); e.preventDefault(); }
+  else if(e.key==='f'||e.key==='F'){ fit(); }
+  else if(e.key==='[' ){ $('#brush').value=Math.max(1,brush-1); $('#brush').oninput({target:$('#brush')}); }
+  else if(e.key===']' ){ $('#brush').value=Math.min(60,brush+1); $('#brush').oninput({target:$('#brush')}); }
+  else if(e.key==='ArrowLeft'){ $('#prev').click(); }
+  else if(e.key==='ArrowRight'){ $('#next').click(); }
+});
+addEventListener('keyup', e=>{ if(e.code==='Space'){ spaceDown=false; vp.classList.remove('pan'); } });
+
+/* ---------- download ---------- */
+function save(withPhoto){
+  const w=cv.width, h=cv.height;
+  const out=document.createElement('canvas'); out.width=w; out.height=h;
+  const o=out.getContext('2d');
+  if(withPhoto){ o.globalAlpha=1; o.drawImage(base,0,0,w,h); }
+  o.drawImage(cv,0,0);
+  const a=document.createElement('a');
+  a.download = (withPhoto?'tracephoto__':'trace__') + images[cur].replace(/\.(jpe?g|webp)$/i,'.png');
+  a.href = out.toDataURL('image/png'); a.click();
+}
+$('#dlTrace').onclick = ()=>save(false);
+$('#dlBoth').onclick  = ()=>save(true);
+</script>
+</body>
+</html>

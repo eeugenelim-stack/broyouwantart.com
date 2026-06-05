@@ -1,0 +1,12 @@
+<!doctype html><meta charset=utf-8><title>figure styles</title>
+<style>
+ body{margin:0;background:#fff;color:#111;font:13px ui-monospace,Menlo,monospace}
+ h1{padding:16px 18px;margin:0;border-bottom:1px solid #eee;font-size:15px}
+ .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;padding:22px;align-items:end}
+ figure{margin:0;text-align:center}
+ figure img{width:100%;background:
+   repeating-conic-gradient(#f4f4f4 0% 25%,#fff 0% 50%) 50%/20px 20px;border:1px solid #eee}
+ figcaption{font-size:11px;color:#666;padding:8px 0}
+ .base{max-width:240px}
+</style><h1>figure — cutout → 3 styles (checker = transparency)</h1>
+<div class=grid><figure><img class=base src="cutout.png"><figcaption>cutout</figcaption></figure><figure><img src="figure-contour-0.png"><figcaption>contour</figcaption></figure><figure><img src="figure-scribble-0.png"><figcaption>scribble</figcaption></figure><figure><img src="figure-charcoal-0.png"><figcaption>charcoal</figcaption></figure></div>
