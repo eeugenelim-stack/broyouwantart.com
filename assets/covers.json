@@ -1,0 +1,485 @@
+{
+  "aura-photography-of-bobby": {
+    "src": "assets/_cropped/HUMAN/AURA%20PHOTOGRAPHY%20OF%20BOBBY/Screenshot%202026-05-11%20at%202.04.24%E2%80%AFPM.jpg",
+    "x": 0.55326,
+    "y": 0.12703,
+    "size": 0.39605,
+    "ar": 1.55258
+  },
+  "back-to-front-tailoring-with-dju": {
+    "src": "assets/_cropped/FASHION%20/BACK%20TO%20FRONT%20TAILORING%20WITH%20DJU/Screenshot%202026-05-11%20at%2011.13.24%E2%80%AFAM.jpg",
+    "x": 0,
+    "y": 0.00001,
+    "size": 0.57846,
+    "ar": 1.63934
+  },
+  "ballet-master-with-ron": {
+    "src": "assets/_cropped/HUMAN/BALLET%20MASTER%20WITH%20RON/Screenshot%202026-05-11%20at%2011.20.53%E2%80%AFAM.jpg",
+    "x": 0.51119,
+    "y": 0.06253,
+    "size": 0.48881,
+    "ar": 1.55367
+  },
+  "bubble-shoot-with-sky-divers-with-lenne": {
+    "src": "assets/_cropped/HUMAN/BUBBLE%20SHOOT%20WITH%20SKY%20DIVERS%20WITH%20LENNE/Screenshot%202026-05-11%20at%201.47.48%E2%80%AFPM.jpg",
+    "x": 0.51355,
+    "y": 0,
+    "size": 0.48645,
+    "ar": 1.54278
+  },
+  "burberry-shoot-in-korea": {
+    "src": "assets/_cropped/FASHION%20/BURBERRY%20SHOOT%20IN%20KOREA%20/Screenshot%202026-05-11%20at%201.50.53%E2%80%AFPM.jpg",
+    "x": 0.17768,
+    "y": 0,
+    "size": 0.64464,
+    "ar": 1.55258
+  },
+  "burberry-sneaker-shoot-with-gabe": {
+    "src": "assets/_cropped/FASHION%20/BURBERRY%20SNEAKER%20SHOOT%20WITH%20GABE/Screenshot%202026-05-11%20at%202.40.53%E2%80%AFPM.jpg",
+    "x": 0,
+    "y": 0.12295,
+    "size": 1,
+    "ar": 0.77356
+  },
+  "buskers-of-singapore": {
+    "src": "assets/_cropped/HUMAN/BUSKERS%20OF%20SINGAPORE/090-Screenshot%202020-11-27%20at%2012.50.56%20PM.jpg",
+    "x": 0,
+    "y": 0.09739,
+    "size": 1,
+    "ar": 0.72864
+  },
+  "butchers-of-singapore-with-ron": {
+    "src": "assets/_cropped/HUMAN/BUTCHERS%20OF%20SINGAPORE%20WITH%20RON/083-Screenshot%202020-11-27%20at%2012.54.22%20PM.jpg",
+    "x": 0,
+    "y": 0,
+    "size": 1,
+    "ar": 0.74743
+  },
+  "charlie-lim-cover-story": {
+    "src": "assets/_cropped/HUMAN/CHARLIE%20LIM%20COVER%20STORY/Screenshot%202026-05-11%20at%201.31.29%E2%80%AFPM.jpg",
+    "x": 0.3522,
+    "y": 0,
+    "size": 0.64643,
+    "ar": 1.54821
+  },
+  "chris-hemsworth": {
+    "src": "assets/_cropped/HUMAN/CHRIS%20HEMSWORTH/013-Screen%20Shot%202018-11-06%20at%207.53.38%20PM.jpg",
+    "x": 0,
+    "y": 0,
+    "size": 1,
+    "ar": 0.76923
+  },
+  "christopher-lee-esquire-singapore-with-joel-low": {
+    "src": "assets/_cropped/HUMAN/CHRISTOPHER%20LEE%20ESQUIRE%20SINGAPORE%20WITH%20JOEL%20LOW/033-Screenshot%202020-08-28%20at%202.29.54%20AM.jpg",
+    "x": 0,
+    "y": 0,
+    "size": 1,
+    "ar": 0.72626
+  },
+  "cinderella-with-lenne": {
+    "src": "assets/_cropped/HUMAN/CINDERALLA%20WITH%20LENNE/102-image-asset.jpeg",
+    "x": 0,
+    "y": 0.05996,
+    "size": 1,
+    "ar": 0.66719
+  },
+  "cobblers-of-singapore-with-dju": {
+    "src": "assets/_cropped/HUMAN/COBBLERS%20OF%20SINGAPORE%20WITH%20DJU/087-Screenshot%202020-11-27%20at%2012.51.34%20PM.jpg",
+    "x": 0,
+    "y": 0,
+    "size": 0.74821,
+    "ar": 1.33496
+  },
+  "colours-of-effergy-t-singapore": {
+    "src": "assets/_cropped/HUMAN/COLOURS%20OF%20EFFERGY%20T%20SINGAPORE/Screenshot%202026-05-11%20at%202.25.18%E2%80%AFPM.jpg",
+    "x": 0.51024,
+    "y": 0,
+    "size": 0.48976,
+    "ar": 1.55258
+  },
+  "connect-the-dots-with-gabe": {
+    "src": "assets/_cropped/FASHION%20/CONNECT%20THE%20DOTS%20WITH%20GABE/Screenshot%202026-05-11%20at%202.10.00%E2%80%AFPM.jpg",
+    "x": 0,
+    "y": 0.19163,
+    "size": 1,
+    "ar": 0.78065
+  },
+  "deaf-people-of-singapore-shoot": {
+    "src": "assets/_cropped/HUMAN/DEAF%20PEOPLE%20OF%20SINGAPORE%20SHOOT/Screenshot%202026-05-11%20at%2011.45.52%E2%80%AFAM.jpg",
+    "x": 0,
+    "y": 0,
+    "size": 0.4934,
+    "ar": 1.55039
+  },
+  "diplo-shoot-with-jumbo-in-la": {
+    "src": "assets/_cropped/HUMAN/DIPLO%20SHOOT%20WITH%20JUMBO%20IN%20LA/023-20181030ESQUIRESingapore_Diplo00024.jpg",
+    "x": 0,
+    "y": 0,
+    "size": 1,
+    "ar": 0.61992
+  },
+  "domini-printers-with-ron": {
+    "src": "assets/_cropped/HUMAN/DOMINI%20PRINTERS%20WITH%20RON/095-Screenshot%202020-11-27%20at%2012.48.10%20PM.jpg",
+    "x": 0,
+    "y": 0.00134,
+    "size": 1,
+    "ar": 0.85971
+  },
+  "dry-cleaner-shoot-with-ron": {
+    "src": "assets/_cropped/FASHION%20/DRY%20CLEANER%20SHOOT%20WITH%20RON/001-20180827-DryCleanOnly2125-2.jpg",
+    "x": 0,
+    "y": 0.13905,
+    "size": 1,
+    "ar": 0.66667
+  },
+  "farmers-of-singapore-with-ron": {
+    "src": "assets/_cropped/HUMAN/FARMERS%20OF%20SINGAPORE%20WITH%20RON/076-Screenshot%202020-11-27%20at%201.05.15%20PM.jpg",
+    "x": 0,
+    "y": 0,
+    "size": 1,
+    "ar": 0.85893
+  },
+  "fashion-direction-remotely-with-lenne": {
+    "src": "assets/_cropped/FASHION%20/FASHION%20DIRECTION%20REMOTELY%20WITH%20LENNE/Screenshot%202026-05-11%20at%201.54.36%E2%80%AFPM.jpg",
+    "x": 0,
+    "y": 0,
+    "size": 0.64464,
+    "ar": 1.55258
+  },
+  "fashion-icon-with-manipulation-with-ron": {
+    "src": "assets/_cropped/OBJECTS/FASHION%20ICON%20WITH%20MANIPULATION%20WITH%20RON/Screenshot%202026-05-11%20at%201.57.36%E2%80%AFPM.jpg",
+    "x": 0,
+    "y": 0.15288,
+    "size": 1,
+    "ar": 0.77422
+  },
+  "freaks-and-geeks-with-gabe": {
+    "src": "assets/_cropped/FASHION%20/FREAKS%20AND%20GEEKS%20WITH%20GABE/Screenshot%202026-05-11%20at%202.00.49%E2%80%AFPM.jpg",
+    "x": 0.05499,
+    "y": 0.14531,
+    "size": 0.85802,
+    "ar": 0.77702
+  },
+  "furniture-shoot-with-marc": {
+    "src": "assets/_cropped/FASHION%20/FURNITURE%20SHOOT%20WITH%20MARC%20/Screenshot%202026-05-11%20at%202.17.59%E2%80%AFPM.jpg",
+    "x": 0.50582,
+    "y": 0.00596,
+    "size": 0.443,
+    "ar": 1.55258
+  },
+  "ganryu-interview-and-art-manipulation-with-ron": {
+    "src": "assets/_cropped/HUMAN/GANRYU%20INTERVIEW%20AND%20ART%20MANIPULATION%20WITH%20RON/Screenshot%202026-05-11%20at%202.01.19%E2%80%AFPM.jpg",
+    "x": 0.03366,
+    "y": 0.10906,
+    "size": 0.42558,
+    "ar": 1.55258
+  },
+  "gardens-of-earthly-delights": {
+    "src": "assets/_cropped/FASHION%20/GARDENS%20OF%20EARTHLY%20DELIGHTS/Screenshot%202026-05-11%20at%202.07.10%E2%80%AFPM.jpg",
+    "x": 0,
+    "y": 0.10691,
+    "size": 1,
+    "ar": 0.77199
+  },
+  "gold-shoot-with-ron": {
+    "src": "assets/_cropped/FASHION%20/GOLD%20SHOOT%20WITH%20RON/Screenshot%202026-05-11%20at%2011.52.08%E2%80%AFAM.jpg",
+    "x": 0,
+    "y": 0,
+    "size": 0.49614,
+    "ar": 1.44926
+  },
+  "gucci-shoot-with-ron-at-yew-tee": {
+    "src": "assets/_cropped/FASHION%20/GUCCI%20SHOOT%20WITH%20RON%20AT%20YEW%20TEE/Screenshot%202026-05-11%20at%2011.57.25%E2%80%AFAM.jpg",
+    "x": 0,
+    "y": 0.0864,
+    "size": 0.49282,
+    "ar": 1.44986
+  },
+  "how-it-started-vs-how-it-is-going": {
+    "src": "assets/_cropped/FASHION%20/HOW%20IT%20STARTED%20VS%20HOW%20IT%20IS%20GOING/Screenshot%202026-05-11%20at%202.22.28%E2%80%AFPM.jpg",
+    "x": 0,
+    "y": 0.11236,
+    "size": 0.47808,
+    "ar": 1.55258
+  },
+  "how-to-wear": {
+    "src": "assets/_cropped/OBJECTS/HOW%20TO%20WEAR/Screenshot%202026-05-11%20at%201.23.59%E2%80%AFPM.jpg",
+    "x": 0.48663,
+    "y": 0.06567,
+    "size": 0.51337,
+    "ar": 1.55258
+  },
+  "justin-shoot-with-ron": {
+    "src": "assets/_cropped/FASHION%20/JUSTIN%20SHOOT%20WITH%20RON/Screenshot%202026-05-11%20at%201.40.55%E2%80%AFPM.jpg",
+    "x": 0.20832,
+    "y": 0,
+    "size": 0.64643,
+    "ar": 1.54712
+  },
+  "kaiju-shoot-with-gabe": {
+    "src": "assets/_cropped/FASHION%20/KAIJU%20SHOOT%20WITH%20GABE/Screenshot%202026-05-11%20at%202.35.58%E2%80%AFPM.jpg",
+    "x": 0.12589,
+    "y": 0,
+    "size": 0.64464,
+    "ar": 1.55258
+  },
+  "lawerence-wong-cover-shoot": {
+    "src": "assets/_cropped/HUMAN/LAWERENCE%20WONG%20COVER%20SHOOT/Screenshot%202026-05-11%20at%202.02.28%E2%80%AFPM.jpg",
+    "x": 0.29118,
+    "y": 0,
+    "size": 0.46338,
+    "ar": 1.55258
+  },
+  "love-shoot-with-ron-and-painting": {
+    "src": "assets/_cropped/FASHION%20/LOVE%20SHOOT%20WITH%20RON%20AND%20PAINTING/Screenshot%202026-05-11%20at%202.45.23%E2%80%AFPM.jpg",
+    "x": 0.17768,
+    "y": 0,
+    "size": 0.64464,
+    "ar": 1.55258
+  },
+  "lv-bridge-shoot-with-lenne": {
+    "src": "assets/_cropped/FASHION%20/LV%20BRIDGE%20SHOOT%20WITH%20LENNE/Screenshot%202026-05-11%20at%202.00.57%E2%80%AFPM.jpg",
+    "x": 0.08939,
+    "y": 0.06306,
+    "size": 0.43848,
+    "ar": 1.55258
+  },
+  "lv-kim-jones-last-shoot-seoul": {
+    "src": "assets/_cropped/FASHION%20/LV%20KIM%20JONES%20LAST%20SHOOT%20SEOUL/Screenshot%202026-05-11%20at%2011.23.11%E2%80%AFAM.jpg",
+    "x": 0.49966,
+    "y": 0.082,
+    "size": 0.50013,
+    "ar": 1.55148
+  },
+  "lv-space-projection-shoot-with-dju": {
+    "src": "assets/_cropped/FASHION%20/LV%20SPACE%20PROJECTION%20SHOOT%20WITH%20DJU/Screenshot%202026-05-11%20at%201.34.29%E2%80%AFPM.jpg",
+    "x": 0,
+    "y": 0.02686,
+    "size": 0.499,
+    "ar": 1.56472
+  },
+  "lv-virgil-shoot-with-gabe": {
+    "src": "assets/_cropped/FASHION%20/LV%20VIRGIL%20SHOOT%20WITH%20GABE%20/064-GC1_4915.jpg",
+    "x": 0,
+    "y": 0,
+    "size": 1,
+    "ar": 0.77778
+  },
+  "mae-tan-woman-we-love": {
+    "src": "assets/_cropped/HUMAN/MAE%20TAN%20WOMAN%20WE%20LOVE%20/Screenshot%202026-05-11%20at%202.08.14%E2%80%AFPM.jpg",
+    "x": 0,
+    "y": 0.03357,
+    "size": 0.49912,
+    "ar": 1.55258
+  },
+  "minimalism-with-ron": {
+    "src": "assets/_cropped/FASHION%20/MINIMALISM%20WITH%20RON%20/Screenshot%202026-05-11%20at%201.46.46%E2%80%AFPM.jpg",
+    "x": 0.07691,
+    "y": 0,
+    "size": 0.64464,
+    "ar": 1.55258
+  },
+  "movie-poster-with-ron-and-pris": {
+    "src": "assets/_cropped/HUMAN/MOVIE%20POSTER%20WITH%20RON%20AND%20PRIS/099-Screenshot%202020-11-27%20at%2012.47.00%20PM.jpg",
+    "x": 0,
+    "y": 0.13152,
+    "size": 1,
+    "ar": 0.74802
+  },
+  "munah-and-hirzi-cover-shoot": {
+    "src": "assets/_cropped/HUMAN/MUNAH%20AND%20HIRZI%20COVER%20SHOOT/Screenshot%202026-05-11%20at%2011.05.56%E2%80%AFAM.jpg",
+    "x": 0.20433,
+    "y": 0,
+    "size": 0.68393,
+    "ar": 1.46112
+  },
+  "new-faces-with-ron-and-papercutting": {
+    "src": "assets/_cropped/HUMAN/NEW%20FACES%20WITH%20RON%20AND%20PAPERCUTTING/030-20200106-OnesToWatch896a.jpg",
+    "x": 0,
+    "y": 0.15365,
+    "size": 1,
+    "ar": 0.66667
+  },
+  "objects-of-desires": {
+    "src": "assets/_cropped/OBJECTS/OBJECTS%20OF%20DESIRES/Screenshot%202026-05-11%20at%202.21.59%E2%80%AFPM.jpg",
+    "x": 0.55268,
+    "y": 0.3061,
+    "size": 0.44732,
+    "ar": 1.55258
+  },
+  "paula-s-loewe-shoot": {
+    "src": "assets/_cropped/FASHION%20/PAULA%27S%20LOEWE%20SHOOT/054-GC1_5600.jpg",
+    "x": 0,
+    "y": 0.01898,
+    "size": 1,
+    "ar": 0.66667
+  },
+  "photo-essay-in-la-with-upcoming-asian-actors-and-talents-in-hollywood": {
+    "src": "assets/_cropped/OBJECTS/PHOTO%20ESSAY%20IN%20LA%20WITH%20UPCOMING%20ASIAN%20ACTORS%20AND%20TALENTS%20IN%20HOLLYWOOD/Screenshot%202026-05-11%20at%201.44.23%E2%80%AFPM.jpg",
+    "x": 0.48456,
+    "y": 0.11168,
+    "size": 0.49335,
+    "ar": 1.54821
+  },
+  "photocopy-shoot-with-ron-and-becca": {
+    "src": "assets/_cropped/FASHION%20/PHOTOCOPY%20SHOOT%20WITH%20RON%20AND%20BECCA/Screenshot%202026-05-11%20at%201.35.22%E2%80%AFPM.jpg",
+    "x": 0.47916,
+    "y": 0,
+    "size": 0.52084,
+    "ar": 1.56139
+  },
+  "photography-collaboration-with-ron-and-dju": {
+    "src": "assets/_cropped/FASHION%20/PHOTOGRAPHY%20COLLABORATION%20WITH%20RON%20AND%20DJU/Screenshot%202026-05-11%20at%201.52.15%E2%80%AFPM.jpg",
+    "x": 0.17744,
+    "y": 0,
+    "size": 0.64464,
+    "ar": 1.55258
+  },
+  "prada-ah-beng-with-lenne": {
+    "src": "assets/_cropped/FASHION%20/PRADA%20AH%20BENG%20WITH%20LENNE/Screenshot%202026-05-11%20at%2011.51.13%E2%80%AFAM.jpg",
+    "x": 0.20593,
+    "y": 0,
+    "size": 0.68929,
+    "ar": 1.44986
+  },
+  "room-with-a-view-with-vanessa": {
+    "src": "assets/_cropped/FASHION%20/ROOM%20WITH%20A%20VIEW%20WITH%20VANESSA/Screenshot%202026-05-11%20at%201.26.14%E2%80%AFPM.jpg",
+    "x": 0.14466,
+    "y": 0,
+    "size": 0.64286,
+    "ar": 1.55587
+  },
+  "shane-balenciaga": {
+    "src": "assets/_cropped/FASHION%20/SHANE%20BALENCIAGA/Screenshot%202026-05-11%20at%2011.49.48%E2%80%AFAM.jpg",
+    "x": 0,
+    "y": 0,
+    "size": 1,
+    "ar": 0.71642
+  },
+  "shorts-and-plants-with-dju": {
+    "src": "assets/_cropped/FASHION%20/SHORTS%20AND%20PLANTS%20WITH%20DJU/Screenshot%202026-05-11%20at%2011.23.58%E2%80%AFAM.jpg",
+    "x": 0,
+    "y": 0,
+    "size": 0.64464,
+    "ar": 1.55258
+  },
+  "singapore-social-cover-shoot": {
+    "src": "assets/_cropped/HUMAN/SINGAPORE%20SOCIAL%20COVER%20SHOOT/Screenshot%202026-05-11%20at%202.42.39%E2%80%AFPM.jpg",
+    "x": 0,
+    "y": 0.03217,
+    "size": 0.50515,
+    "ar": 1.55258
+  },
+  "sukki-with-lenne": {
+    "src": "assets/_cropped/HUMAN/SUKKI%20WITH%20LENNE/Screenshot%202026-05-11%20at%2011.39.18%E2%80%AFAM.jpg",
+    "x": 0.09503,
+    "y": 0.32105,
+    "size": 0.31441,
+    "ar": 1.55477
+  },
+  "sunny-wang-with-ron": {
+    "src": "assets/_cropped/HUMAN/SUNNY%20WANG%20WITH%20RON/032-Screenshot%202020-08-28%20at%202.30.18%20AM.jpg",
+    "x": 0,
+    "y": 0.20443,
+    "size": 1,
+    "ar": 0.71695
+  },
+  "supersized-china-shoot-with-ron": {
+    "src": "assets/_cropped/FASHION%20/SUPERSIZED%20CHINA%20SHOOT%20WITH%20RON/Screenshot%202026-05-11%20at%2011.35.14%E2%80%AFAM.jpg",
+    "x": 0.50914,
+    "y": 0.00424,
+    "size": 0.49086,
+    "ar": 1.55367
+  },
+  "the-og-balenciaga-shoot-esquire-with-gong-gong": {
+    "src": "assets/_cropped/HUMAN/THE%20OG%20BALENCIAGA%20SHOOT%20ESQUIRE%20WITH%20GONG%20GONG/082-Screenshot%202020-11-27%20at%2012.54.52%20PM.jpg",
+    "x": 0.13977,
+    "y": 0,
+    "size": 0.75893,
+    "ar": 1.31876
+  },
+  "the-wizard-of-oz-in-tokyo-with-ron": {
+    "src": "assets/_cropped/FASHION%20/THE%20WIZARD%20OF%20OZ%20IN%20TOKYO%20WITH%20RON/Screenshot%202026-05-11%20at%201.51.25%E2%80%AFPM.jpg",
+    "x": 0,
+    "y": 0,
+    "size": 0.64464,
+    "ar": 1.55258
+  },
+  "valentino-with-ron": {
+    "src": "assets/_cropped/FASHION%20/VALENTINO%20WITH%20RON/Screenshot%202026-05-11%20at%2011.51.49%E2%80%AFAM.jpg",
+    "x": 0.51315,
+    "y": 0.17074,
+    "size": 0.45947,
+    "ar": 1.45122
+  },
+  "vava-in-balenciaga-in-china": {
+    "src": "assets/_cropped/HUMAN/VAVA%20IN%20BALENCIAGA%20IN%20CHINA/014-Screen%20Shot%202018-11-06%20at%207.52.46%20PM.jpg",
+    "x": 0,
+    "y": 0.04237,
+    "size": 1,
+    "ar": 0.76792
+  },
+  "vinny-sharp-cover": {
+    "src": "assets/_cropped/HUMAN/VINNY%20SHARP%20COVER/Screenshot%202026-05-11%20at%2011.48.49%E2%80%AFAM.jpg",
+    "x": 0.35714,
+    "y": 0,
+    "size": 0.64286,
+    "ar": 1.55367
+  },
+  "watch-shoots": {
+    "src": "assets/_cropped/OBJECTS/WATCH%20SHOOTS/Screenshot%202026-05-11%20at%201.27.37%E2%80%AFPM.jpg",
+    "x": 0,
+    "y": 0.13455,
+    "size": 1,
+    "ar": 0.77415
+  },
+  "white-paper-shoot-with-ron": {
+    "src": "assets/_cropped/FASHION%20/WHITE%20PAPER%20SHOOT%20WITH%20RON/003-20180608-AugustFashion1270.jpg",
+    "x": 0,
+    "y": 0.0467,
+    "size": 1,
+    "ar": 0.66667
+  },
+  "yellow-ribbon-project-singapore-with-nicky-loh": {
+    "src": "assets/_cropped/HUMAN/YELLOW%20RIBBON%20PROJECT%20SINGAPORE%20WITH%20NICKY%20LOH/086-Screenshot%202020-11-27%20at%2012.53.44%20PM.jpg",
+    "x": 0,
+    "y": 0.00001,
+    "size": 0.68571,
+    "ar": 1.45702
+  },
+  "yip-ping-xiu-woman-we-love-with-nicky": {
+    "src": "assets/_cropped/HUMAN/YIP%20PING%20XIU%20WOMAN%20WE%20LOVE%20WITH%20NICKY/081-Screenshot%202020-11-27%20at%2012.54.33%20PM.jpg",
+    "x": 0,
+    "y": 0.02968,
+    "size": 1,
+    "ar": 0.76457
+  },
+  "ysl-with-love-with-dju": {
+    "src": "assets/_cropped/FASHION%20/YSL%20WITH%20LOVE%20WITH%20DJU/Screenshot%202026-05-11%20at%202.32.09%E2%80%AFPM.jpg",
+    "x": 0.49608,
+    "y": 0.17549,
+    "size": 0.47534,
+    "ar": 1.55258
+  },
+  "ysl-with-ron": {
+    "src": "assets/_cropped/FASHION%20/YSL%20WITH%20RON/Screenshot%202026-05-11%20at%2011.09.06%E2%80%AFAM.jpg",
+    "x": 0.50177,
+    "y": 0.00004,
+    "size": 0.49376,
+    "ar": 1.44986
+  },
+  "yung-raja-and-fariz-jabba-cover-shoot": {
+    "src": "assets/_cropped/HUMAN/YUNG%20RAJA%20AND%20FARIZ%20JABBA%20COVER%20SHOOT/059-GC1_0573.jpg",
+    "x": 0,
+    "y": 0.08843,
+    "size": 1,
+    "ar": 0.77778
+  },
+  "zhu-hou-ren-my-grandfather-road": {
+    "src": "assets/_cropped/HUMAN/ZHU%20HOU%20REN%20MY%20GRANDFATHER%20ROAD/079-Screenshot%202020-11-27%20at%201.03.13%20PM.jpg",
+    "x": 0,
+    "y": 0.17927,
+    "size": 1,
+    "ar": 0.81953
+  }
+}
