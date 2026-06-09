@@ -919,13 +919,29 @@ function buildWalkScene(){
   resize();
   window.addEventListener('resize', resize);
 
-  // click → go straight to the editorial archive page
+  // click → cascade-collapse the cubes top-down into the origin point, then open the archive
   let suckStarted = false;
   if(!placeMode){
     monolithStage.addEventListener('click', (e)=>{
       if(suckStarted || document.body.classList.contains('monolith-entered')) return;
       suckStarted = true; e.stopPropagation();
-      location.href = 'index.html?archive=1';
+      loopTimers.forEach(clearTimeout);                              // freeze the build loop
+      const layers = [...monolithStage.querySelectorAll('.walk-layer')]; // index li: innermost(bottom) → outermost(top)
+      const N = layers.length, STEP = 70, DUR = 650;                // ms: per-layer stagger + collapse duration
+      const ease = 'cubic-bezier(.5,0,.85,.2)';                     // ease-in → accelerate down into the point
+      // Pin an explicit start transform + force a sync reflow so each transition has a concrete
+      // from-value. (The base transform is scale(var(--suck)); changing that alone won't reliably
+      // start a transition, and rAF is throttled when the tab is backgrounded.)
+      layers.forEach(l=> l.style.transform = 'translate(-50%,-50%) scale(1)');
+      void monolithStage.offsetHeight;                              // commit the start state
+      layers.forEach((layer, li)=>{
+        const delay = (N - 1 - li) * STEP;                          // top cube collapses first, cascading downward
+        layer.style.transition = `top ${DUR}ms ${ease} ${delay}ms, transform ${DUR}ms ${ease} ${delay}ms`;
+        layer.style.top = 'var(--cubey)';                           // slide down onto the origin (the head)
+        layer.style.transform = 'translate(-50%,-50%) scale(0)';    // shrink into a single point
+      });
+      const total = (N - 1) * STEP + DUR;
+      setTimeout(()=> { location.href = 'index.html?archive=1'; }, total + 80); // navigate only once fully collapsed
     }, true);
   }
 
