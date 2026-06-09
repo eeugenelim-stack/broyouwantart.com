@@ -965,7 +965,13 @@ function buildWalkScene(){
   let works = [];
   fetch('assets/walk-lines/manifest.json').then(r=>r.json()).then(list=>{
     works = list.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>'assets/walk-lines/'+v[1].file);
-    begin();
+    // Warm the HTTP cache + pre-decode the line-art up front. Otherwise the browser fetches and
+    // decodes 6 retina PNGs at the instant each layer reveals, which reads as a lag/stutter as the
+    // cubes pop in. Mirrors how the figure frames are already preloaded.
+    const warm = works.map(u=>{ const im = new Image(); im.decoding = 'async'; im.src = u; return im.decode ? im.decode().catch(()=>{}) : Promise.resolve(); });
+    // Start the reveal once the first layer's worth is decoded (so the opening cube is smooth),
+    // capped by a timeout so a slow/failed decode never stalls the entrance.
+    Promise.race([ Promise.allSettled(warm.slice(0, 8)), new Promise(res=>setTimeout(res, 700)) ]).then(begin);
   }).catch(begin);
 
   let wp=0;
