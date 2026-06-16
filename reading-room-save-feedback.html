@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reading Room — note save feedback (demo)</title>
+<style>
+  :root{
+    --bg:#f4f1ea; --ink:#1a1714; --muted:#7a726a; --line:#dcd5c8;
+    --paper:#fbf9f3;
+    --save-idle:#a89e90; --save-busy:#9a7b3f; --save-ok:#3f7d4f; --save-err:#b14a3a;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:15px/1.5 ui-serif, Georgia, "Times New Roman", serif;
+    display:grid; grid-template-columns:1fr 360px; min-height:100vh;
+  }
+  /* fake PDF pane just so the demo feels like the reading room */
+  .reader{padding:40px; display:flex; align-items:flex-start; justify-content:center}
+  .page{
+    width:100%; max-width:520px; aspect-ratio:1/1.35; background:var(--paper);
+    border:1px solid var(--line); box-shadow:0 18px 40px rgba(0,0,0,.08);
+    padding:48px; color:#3a342d;
+  }
+  .page h1{font-size:26px; margin:0 0 6px; letter-spacing:.01em}
+  .page .by{color:var(--muted); font-style:italic; margin-bottom:28px}
+  .page p{margin:0 0 14px; color:#5a534a}
+
+  /* note panel */
+  .notes{
+    border-left:1px solid var(--line); background:var(--paper);
+    display:flex; flex-direction:column; height:100vh; position:sticky; top:0;
+  }
+  .notes header{
+    padding:18px 20px 14px; border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+  }
+  .notes header .ttl{font-weight:600; letter-spacing:.02em}
+  textarea{
+    flex:1; border:0; resize:none; padding:20px; background:transparent;
+    font:15px/1.6 ui-serif, Georgia, serif; color:var(--ink); outline:none;
+  }
+  .notes footer{
+    padding:10px 20px 16px; border-top:1px solid var(--line);
+    color:var(--muted); font-size:12.5px;
+    font-family:ui-sans-serif, system-ui, sans-serif;
+  }
+
+  /* ── the save indicator ─────────────────────────────── */
+  .save-status{
+    display:inline-flex; align-items:center; gap:7px;
+    font:600 12px/1 ui-sans-serif, system-ui, sans-serif;
+    letter-spacing:.03em; color:var(--save-idle);
+    padding:5px 10px; border-radius:999px;
+    background:transparent; border:1px solid transparent;
+    transition:color .25s ease, background .25s ease, border-color .25s ease, opacity .4s ease;
+    white-space:nowrap; user-select:none;
+  }
+  .save-status .dot{
+    width:7px; height:7px; border-radius:50%; background:currentColor;
+    flex:none; transition:transform .25s ease;
+  }
+  .save-status .spinner{
+    width:12px; height:12px; border-radius:50%; flex:none;
+    border:2px solid currentColor; border-top-color:transparent;
+    animation:spin .7s linear infinite; display:none;
+  }
+  .save-status .check{display:none}
+  .save-status .label::after{content:attr(data-idle)}
+
+  /* states */
+  .save-status[data-state="dirty"]{color:var(--save-idle)}
+  .save-status[data-state="dirty"] .dot{transform:scale(1.25)}
+  .save-status[data-state="dirty"] .label::after{content:attr(data-dirty)}
+
+  .save-status[data-state="saving"]{color:var(--save-busy)}
+  .save-status[data-state="saving"] .dot{display:none}
+  .save-status[data-state="saving"] .spinner{display:inline-block}
+  .save-status[data-state="saving"] .label::after{content:attr(data-saving)}
+
+  .save-status[data-state="saved"]{color:var(--save-ok); background:rgba(63,125,79,.08)}
+  .save-status[data-state="saved"] .dot{display:none}
+  .save-status[data-state="saved"] .check{display:inline-block; animation:pop .3s ease}
+  .save-status[data-state="saved"] .label::after{content:attr(data-saved)}
+
+  .save-status[data-state="error"]{
+    color:var(--save-err); background:rgba(177,74,58,.08); border-color:rgba(177,74,58,.3);
+    cursor:pointer;
+  }
+  .save-status[data-state="error"] .dot{display:none}
+  .save-status[data-state="error"] .check{display:inline-block}
+  .save-status[data-state="error"] .label::after{content:attr(data-error)}
+
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes pop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+
+  @media (max-width:760px){
+    body{grid-template-columns:1fr}
+    .reader{display:none}
+    .notes{height:100vh}
+  }
+</style>
+</head>
+<body>
+
+  <div class="reader">
+    <div class="page">
+      <h1>Designing Design</h1>
+      <div class="by">Kenya Hara</div>
+      <p>Design is not a skill but a way of looking at the world. The information we
+         take to be self-evident is often the most worth re-examining.</p>
+      <p>Emptiness is not nothing — it is a vessel that holds the possibility of
+         being filled with meaning.</p>
+      <p><em>(This pane is a stand-in for your PDF. The note panel on the right is the part that matters.)</em></p>
+    </div>
+  </div>
+
+  <aside class="notes">
+    <header>
+      <span class="ttl">Notes</span>
+
+      <!-- ── drop-in save indicator ── -->
+      <span id="saveStatus" class="save-status" role="status" aria-live="polite"
+            data-state="saved" title="Save state"
+            data-idle="Saved" data-dirty="Unsaved changes"
+            data-saving="Saving…" data-saved="Saved" data-error="Couldn't save · Retry">
+        <span class="dot" aria-hidden="true"></span>
+        <span class="spinner" aria-hidden="true"></span>
+        <span class="check" aria-hidden="true">&#10003;</span>
+        <span class="label" aria-hidden="false"></span>
+      </span>
+    </header>
+
+    <textarea id="note" placeholder="Type a note&hellip; it saves on its own."></textarea>
+
+    <footer>
+      Autosaves as you type &middot; <kbd>&#8984;/Ctrl</kbd> + <kbd>S</kbd> to save now &middot;
+      <a href="#" id="simErr">simulate a failed save</a>
+    </footer>
+  </aside>
+
+<script>
+/* ────────────────────────────────────────────────────────────────
+   Reading-room note autosave + save feedback
+   Framework-agnostic. The only thing tying it to your app is
+   bookKey() (how you identify the current book) and persist()
+   (where the note actually gets written). Swap those two for your
+   real storage and the indicator logic stays identical.
+   ──────────────────────────────────────────────────────────────── */
+
+const note   = document.getElementById('note');
+const status = document.getElementById('saveStatus');
+
+// Identify the current book from ?b=...  (matches your URL scheme)
+const bookKey = () =>
+  'note:' + (new URLSearchParams(location.search).get('b') || 'untitled');
+
+// Where the note is stored. Replace this body with a fetch()/IndexedDB
+// call if you ever go beyond localStorage — return a Promise either way.
+async function persist(key, value){
+  if (window.__failNextSave){ window.__failNextSave = false; throw new Error('simulated'); }
+  // tiny artificial delay so the "Saving…" state is actually visible
+  await new Promise(r => setTimeout(r, 450));
+  localStorage.setItem(key, value);
+}
+
+function setState(s){ status.dataset.state = s; }
+
+let saveTimer, savedTimer, lastSaved = '';
+
+async function save(){
+  clearTimeout(savedTimer);
+  const key = bookKey(), value = note.value;
+  if (value === lastSaved){ setState('saved'); return; }   // nothing new
+  setState('saving');
+  try {
+    await persist(key, value);
+    lastSaved = value;
+    setState('saved');
+    // let "Saved ✓" rest a beat, then quietly fall back to the idle tick
+    savedTimer = setTimeout(() => { if (note.value === lastSaved) setState('saved'); }, 1600);
+  } catch (e) {
+    setState('error');   // stays until they retry or type again
+  }
+}
+
+// Debounced autosave: fires 800ms after the last keystroke
+note.addEventListener('input', () => {
+  setState('dirty');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(save, 800);
+});
+
+// Save-now shortcut
+window.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 's'){ e.preventDefault(); clearTimeout(saveTimer); save(); }
+});
+
+// Retry by clicking the error pill
+status.addEventListener('click', () => { if (status.dataset.state === 'error') save(); });
+
+// Don't let a pending save get lost if they close the tab mid-edit
+window.addEventListener('beforeunload', e => {
+  if (note.value !== lastSaved){ try{ localStorage.setItem(bookKey(), note.value); }catch(_){ } }
+});
+
+// Restore on load
+(function init(){
+  const saved = localStorage.getItem(bookKey());
+  if (saved != null){ note.value = saved; lastSaved = saved; }
+  setState('saved');
+})();
+
+// demo-only: arm a failing save so you can see the error state
+document.getElementById('simErr').addEventListener('click', e => {
+  e.preventDefault(); window.__failNextSave = true; note.dispatchEvent(new Event('input'));
+});
+</script>
+</body>
+</html>
