@@ -1,0 +1,14 @@
+{
+  "name": "Reading Room",
+  "short_name": "Reading Room",
+  "description": "Personal PDF reading room with notes.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f4f1ea",
+  "theme_color": "#1a1714",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="96" fill="#1a1714"/>
+  <!-- open book -->
+  <g fill="none" stroke="#f4f1ea" stroke-width="18" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M256 152c-40-26-92-30-140-18v210c48-12 100-8 140 18 40-26 92-30 140-18V134c-48-12-100-8-140 18z"/>
+    <path d="M256 152v210"/>
+  </g>
+  <!-- note lines -->
+  <g stroke="#a89e90" stroke-width="12" stroke-linecap="round">
+    <path d="M150 210h70M150 250h70M150 290h54"/>
+    <path d="M292 210h70M292 250h70M292 290h54"/>
+  </g>
+</svg>
