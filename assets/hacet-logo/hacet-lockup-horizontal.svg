@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 470 170" width="470" height="170" role="img" aria-label="HACET">
+  <!-- HACET horizontal lockup: see-saw H mark beside the hand-drawn wordmark. -->
+
+  <!-- MARK -->
+  <g transform="translate(6 8) scale(0.52)" stroke="#111" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M44 250 q106 11 212 0" fill="none" stroke-width="7"/>
+    <path d="M70 240 q-4 -70 0 -118 q1 -8 31 -7 q4 48 0 126 q-1 6 -31 -1z" fill="#1d5fd6"/>
+    <path d="M63 119 q23 -46 46 0z" fill="#f4c41b"/>
+    <path d="M53 119 q33 -13 66 0z" fill="#f4c41b"/>
+    <path d="M199 240 q-4 -70 0 -118 q1 -8 31 -7 q4 48 0 126 q-1 6 -31 -1z" fill="#e83b2c"/>
+    <path d="M192 119 q23 -46 46 0z" fill="#f4c41b"/>
+    <path d="M182 119 q33 -13 66 0z" fill="#f4c41b"/>
+    <path d="M86 180 L214 152 q9 -2 9 10 q0 11 -10 12 L86 202 q-10 1 -10 -11 q0 -10 10 -11z" fill="#f4c41b"/>
+    <path d="M150 170 L126 216 L174 216 z" fill="#111"/>
+  </g>
+
+  <!-- WORDMARK -->
+  <g transform="translate(172 30) scale(0.74)" fill="none" stroke="#111" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="rotate(-3 50 75)">
+      <path d="M30 36 q-2 38 1 76"/>
+      <path d="M72 36 q2 38 -1 76"/>
+      <path d="M30 74 q21 -4 42 1"/>
+    </g>
+    <g transform="rotate(2 130 75)">
+      <path d="M108 112 L131 35 L154 112"/>
+      <path d="M116 82 q15 -4 30 0"/>
+    </g>
+    <g transform="rotate(-2 205 75)">
+      <path d="M232 50 q-40 -16 -48 25 q-7 41 48 27"/>
+    </g>
+    <g transform="rotate(2 285 75)">
+      <path d="M268 37 q-3 38 0 75"/>
+      <path d="M268 37 q19 -3 38 1"/>
+      <path d="M268 74 q15 -2 30 1"/>
+      <path d="M268 112 q19 -2 38 1"/>
+    </g>
+    <g transform="rotate(-2 345 75)">
+      <path d="M320 38 q26 -3 52 1"/>
+      <path d="M346 38 q2 38 -1 74"/>
+    </g>
+  </g>
+</svg>

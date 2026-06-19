@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 150" width="380" height="150" role="img" aria-label="HACET">
+  <!-- HACET hand-drawn monoline wordmark, slightly wonky / naive. -->
+  <g fill="none" stroke="#111" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+
+    <!-- H -->
+    <g transform="rotate(-3 50 75)">
+      <path d="M30 36 q-2 38 1 76"/>
+      <path d="M72 36 q2 38 -1 76"/>
+      <path d="M30 74 q21 -4 42 1"/>
+    </g>
+
+    <!-- A -->
+    <g transform="rotate(2 130 75)">
+      <path d="M108 112 L131 35 L154 112"/>
+      <path d="M116 82 q15 -4 30 0"/>
+    </g>
+
+    <!-- C -->
+    <g transform="rotate(-2 205 75)">
+      <path d="M232 50 q-40 -16 -48 25 q-7 41 48 27"/>
+    </g>
+
+    <!-- E -->
+    <g transform="rotate(2 285 75)">
+      <path d="M268 37 q-3 38 0 75"/>
+      <path d="M268 37 q19 -3 38 1"/>
+      <path d="M268 74 q15 -2 30 1"/>
+      <path d="M268 112 q19 -2 38 1"/>
+    </g>
+
+    <!-- T -->
+    <g transform="rotate(-2 345 75)">
+      <path d="M320 38 q26 -3 52 1"/>
+      <path d="M346 38 q2 38 -1 74"/>
+    </g>
+  </g>
+</svg>
