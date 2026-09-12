@@ -1,0 +1,61 @@
+# Source product pages for the Ichiban Kuji prize catalogue.
+# One URL per line. Blank lines and lines starting with '#' are ignored.
+#
+# NOTE: these are the 53 URLs exactly as supplied. Spot checks against the live
+# site suggest the real 1kuji.com product slugs are short codes (e.g. pk_mega,
+# chiikawa4, sakamotodays2) rather than these long descriptive slugs, so several
+# of these may 404. Run `kuji_scrape.py --check-only` first to find out which.
+
+https://1kuji.com/products/goddess-of-victory-nikke-chapter5
+https://1kuji.com/products/wind-breaker-japanese-style
+https://1kuji.com/products/kaiju-no-8-third
+https://1kuji.com/products/ultraman-zero-beyond-the-stars
+https://1kuji.com/products/reptiles-amphibians-tiny-friends-vol2
+https://1kuji.com/products/sakamoto-days-vol2
+https://1kuji.com/products/one-piece-future-island-egghead-thoughts-for-you
+https://1kuji.com/products/crayon-shin-chan-im-full
+https://1kuji.com/products/haikyu-the-road-to-the-whole-country
+https://1kuji.com/products/dragon-ball-miagemass-son-goku-youth
+https://1kuji.com/products/naruto-the-land-of-waves
+https://1kuji.com/products/pokemon-megaevolution
+https://1kuji.com/products/tamagotchi-rooms-and-tamagotchi-in-those-days
+https://1kuji.com/products/hunter-x-hunter-chimera-ant-2
+https://1kuji.com/products/bleach-stirring-souls-vol3
+https://1kuji.com/products/honkai-star-rail-vol2
+https://1kuji.com/products/jojos-bizarre-adventure-stardust-crusaders-stand-rush
+https://1kuji.com/products/jujutsu-kaisen-shibuya-incident-arc-four
+https://1kuji.com/products/masked-rider-kuuga-back-to-a-new-legend
+https://1kuji.com/products/digimon-series-clash-of-light-and-darkness
+https://1kuji.com/products/chiikawa-chiikawas-public-bath
+https://1kuji.com/products/berserk-a-vow-of-counter-attack
+https://1kuji.com/products/demon-slayer-kimetsu-no-yaiba-the-brothers-of-thunder
+https://1kuji.com/products/bocchi-the-rock-volume-4
+https://1kuji.com/products/chainsawman-the-movie
+https://1kuji.com/products/metal-gear-solid-delta-snake-eater
+https://1kuji.com/products/sakamoto-days-vol3
+https://1kuji.com/products/umamusume-pretty-derby-the-12th
+https://1kuji.com/products/one-piece-the-unbreakable-law
+https://1kuji.com/products/attack-on-titan-i-will-take-down-the-beast-titan
+https://1kuji.com/products/yuyu-hakusho-dark-tournament-edition-vol2
+https://1kuji.com/products/my-hero-academia-on-top-of-happiness
+https://1kuji.com/products/nierautomata-ver1-1a-for-the-glory-of-mankind
+https://1kuji.com/products/dandadan
+https://1kuji.com/products/spy-family-thanks-for-being-you
+https://1kuji.com/products/the-idolmster-gakuen-part3
+https://1kuji.com/products/dragon-ball-40th-part1
+https://1kuji.com/products/godzilla-monster-stampede
+https://1kuji.com/products/jujutsu-kaisen-5th-anniversary
+https://1kuji.com/products/super-mario-always-together-mario-friends
+https://1kuji.com/products/2025-pokemon-collection-kuji-lets-go-for-a-walk
+https://1kuji.com/products/tamagotchi
+https://1kuji.com/products/one-piece-memory-of-heroines-devils-night
+https://1kuji.com/products/kingdom-the-great-persons-of-the-next-generation
+https://1kuji.com/products/cyberpunk-edgerunners
+https://1kuji.com/products/mobile-suit-gundam-gquuuuuu-x-vol3
+https://1kuji.com/products/demon-slayer-kimetsu-no-yaiba-my-sisters-enemy
+https://1kuji.com/products/time-i-got-reincarnated-as-a-slime-rimuru-his-friends-and-the-devil
+https://1kuji.com/products/hunter-x-hunter-cross-the-x-day
+https://1kuji.com/products/one-piece-future-island-egghead-burst-of-energy
+https://1kuji.com/products/dragon-ball-dragonball-snap-collection2
+https://1kuji.com/products/kamen-rider-zeztz-kamen-rider-gavv
+https://1kuji.com/products/ranma1-2-second
