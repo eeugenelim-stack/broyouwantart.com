@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // Tags double-page-spread images in index.html's PROJECTS data.
+// Also records each image's pixel size ("w","h") so the project book can size pages to the photo.
 // Rule: an image whose pixel aspect ratio (w/h) >= SPREAD_RATIO is a spread
 // (gets "spread":1); anything below is a single page (flag removed if present).
 // Re-runnable: re-reads dimensions from disk and rewrites flags from scratch.
@@ -8,7 +9,6 @@
 //         node tools/tag-spreads.mjs --dry     (report only, no write)
 
 import { readFileSync, writeFileSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -57,27 +57,26 @@ const srcs = new Set();
 for (const p of projects) for (const img of (p.images || [])) if (img && img.src) srcs.add(img.src);
 const list = [...srcs];
 
-// --- 3. Read pixel dimensions in batches via macOS `sips`.
+// --- 3. Read pixel dimensions straight from the JPEG/PNG headers (pure Node, any OS).
 const dims = new Map();      // src -> {w,h}
 const missing = [];
 const decode = (src) => join(ROOT, decodeURIComponent(src));
-const BATCH = 60;
-for (let i = 0; i < list.length; i += BATCH) {
-  const chunk = list.slice(i, i + BATCH);
-  const paths = chunk.map(decode);
-  let out = '';
-  try {
-    out = execFileSync('sips', ['-g', 'pixelWidth', '-g', 'pixelHeight', ...paths], { encoding: 'utf8' });
-  } catch (e) { out = e.stdout ? String(e.stdout) : ''; }
-  // sips prints: "<path>\n  pixelWidth: N\n  pixelHeight: N\n" per file.
-  let cur = null, w = 0, h = 0;
-  const commit = () => { if (cur && w && h) { const s = chunk.find(c => decode(c) === cur); if (s) dims.set(s, { w, h }); } };
-  for (const line of out.split('\n')) {
-    if (/^\s+pixelWidth:\s*(\d+)/.test(line)) w = +RegExp.$1;
-    else if (/^\s+pixelHeight:\s*(\d+)/.test(line)) h = +RegExp.$1;
-    else if (line.trim()) { commit(); cur = line.trim(); w = 0; h = 0; }
+function readDims(file) {
+  const b = readFileSync(file);
+  if (b.readUInt32BE(0) === 0x89504e47) return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) };   // PNG IHDR
+  if (b[0] !== 0xff || b[1] !== 0xd8) return null;
+  let i = 2;
+  while (i + 9 < b.length) {                                   // walk JPEG segments to the SOFn frame header
+    if (b[i] !== 0xff) { i++; continue; }
+    const m = b[i + 1];
+    if (m === 0xd8 || m === 0x01 || (m >= 0xd0 && m <= 0xd7)) { i += 2; continue; }
+    if (m >= 0xc0 && m <= 0xcf && m !== 0xc4 && m !== 0xc8 && m !== 0xcc) return { w: b.readUInt16BE(i + 7), h: b.readUInt16BE(i + 5) };
+    i += 2 + b.readUInt16BE(i + 2);
   }
-  commit();
+  return null;
+}
+for (const s of list) {
+  try { const d = readDims(decode(s)); if (d && d.w && d.h) dims.set(s, d); } catch (e) { /* missing file */ }
 }
 for (const s of list) if (!dims.has(s)) missing.push(s);
 
@@ -85,9 +84,10 @@ for (const s of list) if (!dims.has(s)) missing.push(s);
 let spreadN = 0, singleN = 0, unknownN = 0, forcedN = 0;
 for (const p of projects) for (const img of (p.images || [])) {
   if (!img || !img.src) continue;
-  if (isForcedSingle(img.src)) { delete img.spread; singleN++; forcedN++; continue; }   // manual override
   const d = dims.get(img.src);
-  if (!d) { delete img.spread; unknownN++; continue; }   // unknown -> treat as single (no flag)
+  if (isForcedSingle(img.src)) { delete img.spread; if (d) { img.w = d.w; img.h = d.h; } singleN++; forcedN++; continue; }   // manual override
+  if (!d) { delete img.spread; delete img.w; delete img.h; unknownN++; continue; }
+  img.w = d.w; img.h = d.h;   // true pixel size → the project book sizes each page to the photo, no cropping   // unknown -> treat as single (no flag)
   const ratio = d.w / d.h;
   if (ratio >= SPREAD_RATIO) { img.spread = 1; spreadN++; }
   else { delete img.spread; singleN++; }
